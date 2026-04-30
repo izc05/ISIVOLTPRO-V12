@@ -1,4 +1,4 @@
-const CACHE_NAME = 'residencia-santa-teresa-sin-datos-v3';
+const CACHE_NAME = 'residencia-santa-teresa-sin-datos-v4';
 const APP_SHELL = [
   './',
   './index.html',
