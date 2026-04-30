@@ -1,0 +1,19 @@
+{
+  "name": "Residencia Santa Teresa · Guía de cuidados",
+  "short_name": "Santa Teresa",
+  "description": "PWA de prueba sin almacenamiento para crear fichas de cuidados en PDF.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fffdf8",
+  "theme_color": "#3b9145",
+  "icons": [
+    {
+      "src": "assets/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
