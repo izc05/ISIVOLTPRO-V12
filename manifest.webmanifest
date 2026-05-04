@@ -1,13 +1,13 @@
 {
-  "name": "Residencia Santa Teresa · Guía de cuidados",
+  "name": "Residencia Santa Teresa · Base local segura",
   "short_name": "Santa Teresa",
-  "description": "PWA de prueba sin almacenamiento para crear fichas de cuidados en PDF.",
+  "description": "PWA local-first para crear, guardar y modificar fichas de cuidados en una base local cifrada.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#fffdf8",
-  "theme_color": "#3b9145",
+  "theme_color": "#2f7d3b",
   "icons": [
     {
       "src": "assets/app-icon.svg",
