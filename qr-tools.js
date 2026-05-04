@@ -9,6 +9,7 @@
   ready(() => {
     insertHomeMenu();
     insertButtons();
+    patchAppFunctions();
     setAppMode('home');
   });
 
@@ -50,7 +51,36 @@
     const app = $('appView');
     if(!app) return;
     app.classList.remove('home-mode','list-mode','editor-mode');
-    if(!app.classList.contains('preview-mode')) app.classList.add(`${mode}-mode`);
+    if(mode !== 'preview') app.classList.remove('preview-mode');
+    if(mode === 'preview') app.classList.add('preview-mode','editor-mode');
+    else app.classList.add(`${mode}-mode`);
+  }
+
+  function patchAppFunctions(){
+    const newBtn = $('newFichaBtn');
+    if(newBtn && !newBtn.dataset.modePatched){
+      const old = newBtn.onclick;
+      newBtn.onclick = e => { if(old) old.call(newBtn, e); setAppMode('editor'); };
+      newBtn.dataset.modePatched = '1';
+    }
+    const heroNew = $('heroNewFichaBtn');
+    if(heroNew && !heroNew.dataset.modePatched){
+      const old = heroNew.onclick;
+      heroNew.onclick = e => { if(old) old.call(heroNew, e); setAppMode('editor'); };
+      heroNew.dataset.modePatched = '1';
+    }
+    const previewBtn = $('previewFichaBtn');
+    if(previewBtn && !previewBtn.dataset.modePatched){
+      const old = previewBtn.onclick;
+      previewBtn.onclick = e => { if(old) old.call(previewBtn, e); setAppMode('preview'); };
+      previewBtn.dataset.modePatched = '1';
+    }
+    const backToForm = $('backToFormBtn');
+    if(backToForm && !backToForm.dataset.modePatched){
+      const old = backToForm.onclick;
+      backToForm.onclick = e => { if(old) old.call(backToForm, e); setAppMode('editor'); };
+      backToForm.dataset.modePatched = '1';
+    }
   }
 
   function insertButtons(){
@@ -198,7 +228,7 @@
     if(typeof state === 'undefined' || !state.residents){ alert('Primero desbloquea la base local.'); return; }
     const ficha = state.residents.find(r => r.id === id);
     if(!ficha){ alert('No encuentro esta ficha en la base local de este dispositivo.'); return; }
-    setAppMode('editor');
+    setAppMode('preview');
     selectFicha(id, false);
     if(typeof setStep === 'function') setStep(3);
     if(typeof status === 'function') status('appStatus', 'Ficha abierta desde QR.', 'ok');
