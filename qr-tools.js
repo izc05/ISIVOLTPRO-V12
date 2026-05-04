@@ -7,12 +7,51 @@
   function ready(fn){ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
 
   ready(() => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'extras.css';
-    document.head.appendChild(link);
+    insertHomeMenu();
     insertButtons();
+    setAppMode('home');
   });
+
+  function insertHomeMenu(){
+    const app = $('appView');
+    const hero = document.querySelector('.app-hero');
+    if(!app || !hero || $('homeMenu')) return;
+    const menu = document.createElement('section');
+    menu.id = 'homeMenu';
+    menu.className = 'home-menu no-print';
+    menu.innerHTML = `
+      <p class="eyebrow">Inicio rápido</p>
+      <h2>¿Qué quieres hacer?</h2>
+      <p class="lead">Elige una opción. Así la pantalla queda limpia y no aparece todo el formulario de golpe.</p>
+      <div class="home-actions">
+        <button id="homeNewFichaBtn" class="home-action primary-tile" type="button"><span class="ico">✍️</span><strong>Rellenar ficha</strong><span>Crear una ficha nueva paso a paso.</span></button>
+        <button id="homeListBtn" class="home-action" type="button"><span class="ico">📋</span><strong>Ver fichas</strong><span>Buscar, abrir o modificar fichas guardadas.</span></button>
+        <button id="homeScanBtn" class="home-action" type="button"><span class="ico">▦</span><strong>Escanear QR</strong><span>Abrir rápidamente una ficha por código QR.</span></button>
+        <button id="homeBackupBtn" class="home-action" type="button"><span class="ico">💾</span><strong>Copias</strong><span>Exportar una copia cifrada de seguridad.</span></button>
+      </div>`;
+    hero.after(menu);
+
+    const back = document.createElement('button');
+    back.id = 'backHomeBtn';
+    back.className = 'secondary mode-back no-print';
+    back.type = 'button';
+    back.textContent = 'Inicio';
+    const actions = document.querySelector('.hero-actions');
+    if(actions) actions.prepend(back);
+
+    $('homeNewFichaBtn').onclick = () => { if(typeof clearForm === 'function') clearForm(); setAppMode('editor'); };
+    $('homeListBtn').onclick = () => setAppMode('list');
+    $('homeScanBtn').onclick = openScanner;
+    $('homeBackupBtn').onclick = () => { const btn = $('exportBackupBtn'); if(btn) btn.click(); };
+    back.onclick = () => setAppMode('home');
+  }
+
+  function setAppMode(mode){
+    const app = $('appView');
+    if(!app) return;
+    app.classList.remove('home-mode','list-mode','editor-mode');
+    if(!app.classList.contains('preview-mode')) app.classList.add(`${mode}-mode`);
+  }
 
   function insertButtons(){
     const toolbar = document.querySelector('.toolbar');
@@ -45,6 +84,8 @@
       qr.onclick = showCurrentQr;
       previewActions.insertBefore(qr, previewActions.firstChild);
     }
+    const heroNew = $('heroNewFichaBtn');
+    if(heroNew){ heroNew.onclick = () => { if(typeof clearForm === 'function') clearForm(); setAppMode('editor'); }; }
   }
 
   function currentFicha(){
@@ -87,7 +128,7 @@
   function printQr(ficha, code){
     const w = window.open('', '_blank', 'noopener,noreferrer,width=520,height=720');
     if(!w){ alert('El navegador ha bloqueado la ventana de impresión.'); return; }
-    w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>QR ${escapeHtml(ficha.nombre||'ficha')}</title></head><body><main class="qr-print-page"><h1>${escapeHtml(ficha.nombre||'Ficha')}</h1><p>${ficha.habitacion ? 'Habitación ' + escapeHtml(ficha.habitacion) : 'Residencia Santa Teresa'}</p>${makeQrSvg(code)}<p>Código interno: ${escapeHtml(code)}</p><p>Escanear desde la app desbloqueada.</p></main><style>${document.querySelector('style')?.textContent || ''}.qr-print-page{font-family:Arial,sans-serif;text-align:center;padding:24px}.qr-print-page svg{width:260px;max-width:90vw}.qr-print-page h1{font-size:22px;margin:8px 0}.qr-print-page p{color:#555}</style></body></html>`);
+    w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>QR ${escapeHtml(ficha.nombre||'ficha')}</title></head><body><main class="qr-print-page"><h1>${escapeHtml(ficha.nombre||'Ficha')}</h1><p>${ficha.habitacion ? 'Habitación ' + escapeHtml(ficha.habitacion) : 'Residencia Santa Teresa'}</p>${makeQrSvg(code)}<p>Código interno: ${escapeHtml(code)}</p><p>Escanear desde la app desbloqueada.</p></main><style>.qr-print-page{font-family:Arial,sans-serif;text-align:center;padding:24px}.qr-print-page svg{width:260px;max-width:90vw}.qr-print-page h1{font-size:22px;margin:8px 0}.qr-print-page p{color:#555}</style></body></html>`);
     w.document.close();
     setTimeout(() => { w.focus(); w.print(); }, 250);
   }
@@ -157,6 +198,7 @@
     if(typeof state === 'undefined' || !state.residents){ alert('Primero desbloquea la base local.'); return; }
     const ficha = state.residents.find(r => r.id === id);
     if(!ficha){ alert('No encuentro esta ficha en la base local de este dispositivo.'); return; }
+    setAppMode('editor');
     selectFicha(id, false);
     if(typeof setStep === 'function') setStep(3);
     if(typeof status === 'function') status('appStatus', 'Ficha abierta desde QR.', 'ok');
@@ -178,13 +220,12 @@
     return String(str||'').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
   }
 
-  // Generador QR local sin servicios externos: QR versión 3-L, modo byte, máscara 0.
   function makeQrSvg(text){
     const size = 29, dataCodewords = 55, eccCodewords = 15;
     const bytes = Array.from(new TextEncoder().encode(text));
     if(bytes.length > 48) throw new Error('Texto QR demasiado largo para esta versión.');
     const bits = [];
-    pushBits(bits, 0b0100, 4); // byte mode
+    pushBits(bits, 0b0100, 4);
     pushBits(bits, bytes.length, 8);
     bytes.forEach(b => pushBits(bits, b, 8));
     const maxBits = dataCodewords * 8;
@@ -249,7 +290,7 @@
     for(let i=8;i<15;i++) reserve(8,size-15+i);
   }
   function addFormatBits(set,size){
-    const bits='111011111000100'; // EC level L, mask 0
+    const bits='111011111000100';
     const b=i=>bits[i]==='1';
     for(let i=0;i<=5;i++) set(8,i,b(i),true);
     set(8,7,b(6),true); set(8,8,b(7),true); set(7,8,b(8),true);
