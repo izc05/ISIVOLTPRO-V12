@@ -88,10 +88,11 @@
       <section class="editor">
         <div class="editor-head">
           <div>
-            <p class="eyebrow">Ficha editable</p>
+            <p class="eyebrow">Ficha guiada</p>
             <h2 id="currentFichaLabel">Nueva ficha</h2>
           </div>
           <div class="editor-actions">
+            <button id="previewFichaBtn" class="secondary">Ver resultado</button>
             <button id="printFichaBtn" class="secondary">Imprimir / PDF</button>
             <button id="deleteFichaBtn" class="danger" disabled>Borrar</button>
             <button id="saveFichaBtn" class="primary">Guardar cifrada</button>
@@ -99,8 +100,20 @@
         </div>
         <p id="appStatus" class="status" hidden></p>
 
+        <div class="wizard-card" aria-label="Asistente de relleno">
+          <div class="progress-head"><strong id="stepTitle">Paso 1 · Datos básicos</strong><span id="stepCounter">1 de 4</span></div>
+          <div class="progress"><span id="progressFill"></span></div>
+          <div class="step-pills" role="tablist" aria-label="Pasos de la ficha">
+            <button class="step-pill active" type="button" data-go-step="0">1 Datos</button>
+            <button class="step-pill" type="button" data-go-step="1">2 Bienestar</button>
+            <button class="step-pill" type="button" data-go-step="2">3 Cuidados</button>
+            <button class="step-pill" type="button" data-go-step="3">4 Resultado</button>
+          </div>
+          <p id="stepHelp" class="muted">Empieza por los datos mínimos. La ficha se puede completar poco a poco y guardar cuando quieras.</p>
+        </div>
+
         <form class="form-grid" autocomplete="off">
-          <section class="form-section span-2">
+          <section class="form-section span-2" data-step="0">
             <h3>Datos principales</h3>
             <div class="grid-3">
               <div><label for="nombre">Nombre visible en la ficha</label><input id="nombre" required></div>
@@ -116,7 +129,7 @@
             <textarea id="resumen" placeholder="Descripción breve, preferencias importantes y contexto de cuidado."></textarea>
           </section>
 
-          <section class="form-section photo-card">
+          <section class="form-section photo-card" data-step="0">
             <h3>Foto opcional</h3>
             <div class="photo-box"><img id="photoPreview" alt="Foto de la persona" hidden><span id="photoEmpty">Sin foto</span></div>
             <input id="photoInput" type="file" accept="image/*">
@@ -124,14 +137,14 @@
             <p class="muted">Límite recomendado: 900 KB. La imagen queda cifrada dentro de la base local.</p>
           </section>
 
-          <section class="form-section">
-            <h3>Bienestar</h3>
-            <label for="bien">Lo que le hace sentir bien · un punto por línea</label><textarea id="bien"></textarea>
-            <label for="incomoda">Lo que puede incomodarle · un punto por línea</label><textarea id="incomoda"></textarea>
-            <label for="claves">Claves para cuidarle mejor · un punto por línea</label><textarea id="claves"></textarea>
+          <section class="form-section span-2" data-step="1">
+            <h3>Bienestar y forma de tratarle</h3>
+            <label for="bien">Lo que le hace sentir bien · un punto por línea</label><textarea id="bien" placeholder="Ej. Que le expliquen con antelación lo que se va a hacer"></textarea>
+            <label for="incomoda">Lo que puede incomodarle · un punto por línea</label><textarea id="incomoda" placeholder="Ej. Cambios bruscos, prisas o ruidos fuertes"></textarea>
+            <label for="claves">Claves para cuidarle mejor · un punto por línea</label><textarea id="claves" placeholder="Ej. Hablar despacio, validar sus preferencias, mantener su rutina"></textarea>
           </section>
 
-          <section class="form-section span-2">
+          <section class="form-section span-2" data-step="2">
             <h3>Cuidados y observaciones</h3>
             <div class="grid-2">
               <div><label for="comunicacion">Comunicación</label><textarea id="comunicacion"></textarea></div>
@@ -144,9 +157,22 @@
             <label for="observaciones">Observaciones generales</label><textarea id="observaciones"></textarea>
           </section>
         </form>
+
+        <div class="wizard-actions no-print">
+          <button id="prevStepBtn" class="secondary" type="button">Anterior</button>
+          <button id="nextStepBtn" class="primary" type="button">Siguiente</button>
+        </div>
       </section>
 
       <article id="printSheet" class="print-sheet" aria-label="Vista imprimible">
+        <div class="preview-toolbar no-print">
+          <div><strong>Vista final de la ficha</strong><p class="muted">Este es el formato que se imprimirá. Se mantienen colores y bloques.</p></div>
+          <div class="preview-actions">
+            <button id="backToFormBtn" class="secondary" type="button">Volver a editar</button>
+            <button id="previewSaveBtn" class="primary" type="button">Guardar cifrada</button>
+            <button id="previewPrintBtn" class="secondary" type="button">Imprimir / PDF</button>
+          </div>
+        </div>
         <header class="print-header">
           <img src="assets/diputacion-jaen-logo.svg" alt="">
           <div><h1>Conociendo a: <span id="printTitle">Nueva ficha</span></h1><p id="printSubtitle">Ficha de cuidados personalizada</p></div>
@@ -178,7 +204,7 @@
       </article>
     </section>
   </main>
-  <footer class="version">v<span id="appVersion">2.0.0</span></footer>
+  <footer class="version">v<span id="appVersion">2.1.0</span></footer>
   <script src="app.js"></script>
 </body>
 </html>
