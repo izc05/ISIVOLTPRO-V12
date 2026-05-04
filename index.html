@@ -6,6 +6,9 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'; upgrade-insecure-requests">
   <meta name="theme-color" content="#2f7d3b">
   <meta name="robots" content="noindex,nofollow">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Santa Teresa">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Residencia Santa Teresa · Base local segura</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
@@ -13,10 +16,16 @@
 <body>
   <main class="shell">
     <section id="setupView" class="auth-card hidden" aria-labelledby="setupTitle">
-      <img class="brand" src="assets/diputacion-jaen-logo.svg" alt="Diputación de Jaén">
+      <div class="auth-hero-mini">
+        <img class="brand" src="assets/diputacion-jaen-logo.svg" alt="Diputación de Jaén">
+        <span class="secure-badge">Local · Cifrado · Tablet</span>
+      </div>
       <p class="eyebrow">Primera configuración</p>
       <h1 id="setupTitle">Crear base local cifrada</h1>
-      <p class="lead">Esta base se guarda únicamente en este dispositivo mediante IndexedDB cifrado con AES-GCM. La contraseña maestra no se guarda.</p>
+      <p class="lead">Una app privada para crear y modificar fichas de cuidados en una tablet, sin servidor y con la información cifrada en el propio dispositivo.</p>
+      <div class="trust-strip" aria-label="Características de seguridad">
+        <span>🔐 AES-GCM</span><span>📱 Instalable</span><span>🌙 Offline</span>
+      </div>
       <label for="setupVaultName">Nombre de la base</label>
       <input id="setupVaultName" autocomplete="organization" value="Residencia Santa Teresa">
       <label for="setupPassword">Contraseña maestra</label>
@@ -24,21 +33,29 @@
       <label for="setupPassword2">Repetir contraseña maestra</label>
       <input id="setupPassword2" type="password" autocomplete="new-password" minlength="10">
       <label class="checkline"><input id="setupAccept" type="checkbox"> Entiendo que sin esta contraseña no se podrá recuperar la base y que debo hacer copias cifradas periódicas.</label>
-      <button id="createVaultBtn" class="primary">Crear base local</button>
+      <button id="createVaultBtn" class="primary big-action">Crear base local</button>
+      <button class="secondary installAppBtn hidden" type="button">Instalar en este dispositivo</button>
       <p id="setupStatus" class="status" hidden></p>
-      <p class="note">Uso recomendado: tablet o equipo controlado, usuario de sistema protegido, bloqueo de pantalla y copia cifrada guardada fuera del dispositivo.</p>
+      <p class="note">Uso recomendado: tablet controlada, bloqueo de pantalla activo y copia cifrada guardada fuera del dispositivo.</p>
     </section>
 
     <section id="unlockView" class="auth-card hidden" aria-labelledby="unlockTitle">
-      <img class="brand" src="assets/diputacion-jaen-logo.svg" alt="Diputación de Jaén">
-      <p class="eyebrow">Acceso privado local</p>
+      <div class="auth-hero-mini">
+        <img class="brand" src="assets/diputacion-jaen-logo.svg" alt="Diputación de Jaén">
+        <span class="secure-badge">Acceso privado</span>
+      </div>
+      <p class="eyebrow">Base local cifrada</p>
       <h1 id="unlockTitle"><span id="unlockVaultName">Base local cifrada</span></h1>
-      <p class="lead">Introduce la contraseña maestra. No se envía nada a internet.</p>
+      <p class="lead">Introduce la contraseña maestra. La información no se envía a internet.</p>
+      <div class="trust-strip" aria-label="Características de seguridad">
+        <span>🔒 Contraseña maestra</span><span>⏱️ Bloqueo automático</span><span>💾 Copia cifrada</span>
+      </div>
       <label for="unlockPassword">Contraseña maestra</label>
       <input id="unlockPassword" type="password" autocomplete="current-password">
-      <button id="unlockBtn" class="primary">Desbloquear</button>
+      <button id="unlockBtn" class="primary big-action">Desbloquear</button>
       <div class="actions one">
         <button id="importBackupBtn" class="secondary">Importar copia cifrada</button>
+        <button class="secondary installAppBtn hidden" type="button">Instalar app</button>
       </div>
       <input id="backupInput" type="file" accept="application/json" hidden>
       <p id="unlockStatus" class="status" hidden></p>
@@ -46,6 +63,18 @@
     </section>
 
     <section id="appView" class="app hidden" aria-label="Gestión de fichas">
+      <header class="app-hero no-print">
+        <div>
+          <p class="eyebrow">Santa Teresa Cuidados</p>
+          <h1>Fichas de cuidados con base local segura</h1>
+          <p class="lead">Rellena paso a paso, revisa el resultado final y guarda cada ficha cifrada en la tablet.</p>
+        </div>
+        <div class="hero-actions">
+          <button class="secondary installAppBtn hidden" type="button">Instalar app</button>
+          <button id="heroNewFichaBtn" class="primary" type="button">Crear ficha</button>
+        </div>
+      </header>
+
       <aside class="sidebar">
         <div class="side-head">
           <div>
@@ -56,13 +85,22 @@
           <button id="lockBtn" class="secondary compact">Bloquear</button>
         </div>
 
+        <div class="vault-stats" aria-label="Resumen de fichas">
+          <article><span id="totalStat">0</span><small>Total</small></article>
+          <article><span id="activeStat">0</span><small>Activas</small></article>
+          <article><span id="reviewStat">0</span><small>Revisión</small></article>
+          <article><span id="archivedStat">0</span><small>Archivadas</small></article>
+        </div>
+
         <div class="toolbar">
           <button id="newFichaBtn" class="primary">Nueva ficha</button>
           <button id="exportBackupBtn" class="secondary">Copia cifrada</button>
         </div>
 
-        <label for="searchBox">Buscar por nombre, habitación o estado</label>
-        <input id="searchBox" placeholder="Ej. María, 104, activa">
+        <div class="search-card">
+          <label for="searchBox">Buscar por nombre, habitación o estado</label>
+          <input id="searchBox" placeholder="Ej. María, 104, activa">
+        </div>
         <div class="list-title"><strong>Fichas</strong><span id="residentCount">0 fichas</span></div>
         <ul id="residentList" class="resident-list"></ul>
 
@@ -104,10 +142,10 @@
           <div class="progress-head"><strong id="stepTitle">Paso 1 · Datos básicos</strong><span id="stepCounter">1 de 4</span></div>
           <div class="progress"><span id="progressFill"></span></div>
           <div class="step-pills" role="tablist" aria-label="Pasos de la ficha">
-            <button class="step-pill active" type="button" data-go-step="0">1 Datos</button>
-            <button class="step-pill" type="button" data-go-step="1">2 Bienestar</button>
-            <button class="step-pill" type="button" data-go-step="2">3 Cuidados</button>
-            <button class="step-pill" type="button" data-go-step="3">4 Resultado</button>
+            <button class="step-pill active" type="button" data-go-step="0"><span>1</span> Datos</button>
+            <button class="step-pill" type="button" data-go-step="1"><span>2</span> Bienestar</button>
+            <button class="step-pill" type="button" data-go-step="2"><span>3</span> Cuidados</button>
+            <button class="step-pill" type="button" data-go-step="3"><span>4</span> Resultado</button>
           </div>
           <p id="stepHelp" class="muted">Empieza por los datos mínimos. La ficha se puede completar poco a poco y guardar cuando quieras.</p>
         </div>
@@ -204,7 +242,7 @@
       </article>
     </section>
   </main>
-  <footer class="version">v<span id="appVersion">2.1.0</span></footer>
+  <footer class="version">v<span id="appVersion">2.2.0</span></footer>
   <script src="app.js"></script>
 </body>
 </html>
