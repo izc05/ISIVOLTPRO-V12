@@ -1,9 +1,11 @@
-const CACHE_NAME = 'santa-teresa-local-secure-v2';
+const CACHE_NAME = 'santa-teresa-local-secure-v3-qr';
 const APP_SHELL = [
   './',
   './index.html',
   './styles.css',
+  './extras.css',
   './app.js',
+  './qr-tools.js',
   './manifest.webmanifest',
   './assets/app-icon.svg',
   './assets/diputacion-jaen-logo.svg',
