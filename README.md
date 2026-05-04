@@ -1,39 +1,67 @@
-# Residencia Santa Teresa · Guía de cuidados
+# Residencia Santa Teresa · Base local segura
 
-Aplicación PWA de prueba para crear fichas de cuidados imprimibles en PDF.
+Aplicación PWA local-first para crear, guardar y modificar fichas de cuidados en una base local cifrada del propio dispositivo.
 
-## Modo privacidad
+## Qué permite hacer
 
-Esta versión está preparada para pruebas en tablet/móvil **sin almacenamiento de datos de residentes**.
+- Crear una base local cifrada la primera vez que se abre.
+- Definir una contraseña maestra propia.
+- Crear fichas de residentes/personas usuarias.
+- Modificar fichas existentes.
+- Añadir foto opcional cifrada dentro de la ficha.
+- Buscar por nombre, habitación o estado.
+- Imprimir o guardar la ficha como PDF desde el navegador.
+- Exportar una copia cifrada de toda la base.
+- Importar una copia cifrada en otro dispositivo.
+- Cambiar la contraseña maestra recifrando las fichas.
+- Bloqueo automático tras 10 minutos de inactividad.
 
-- No guarda fichas.
-- No guarda nombres, fotos ni datos de residentes.
-- No usa base de datos.
-- No exporta copias con datos personales.
-- Cada vez que se abre o se recarga, vuelve a la ficha base de ejemplo.
-- Lo escrito solo permanece mientras la pantalla está abierta.
-- El único archivo que puede quedar guardado es el PDF si el usuario decide imprimirlo o guardarlo.
+## Seguridad local
 
-## Acceso de prueba
+Esta versión no usa servidor, no usa Firebase, no usa login externo y no envía datos a internet.
 
-Usuario: `admin`  
-Contraseña: `1234`
+Los datos se guardan en IndexedDB y cada ficha se cifra antes de almacenarse usando Web Crypto:
 
-## Uso
+- AES-GCM 256 para cifrado.
+- PBKDF2 SHA-256 para derivar la clave desde la contraseña maestra.
+- 250.000 iteraciones PBKDF2.
+- La contraseña maestra no se guarda.
+- Las copias de seguridad se exportan cifradas.
 
-1. Abrir la aplicación.
-2. Entrar con el usuario de prueba.
-3. Rellenar la ficha.
-4. Pulsar **Generar PDF**.
-5. Cerrar o recargar para borrar lo introducido.
+## Límites importantes
 
-## Instalación en móvil/tablet
+Esta app mejora mucho la privacidad frente al prototipo inicial, pero sigue siendo una app local. La seguridad real también depende del dispositivo:
 
-Cuando esté publicado con GitHub Pages:
+- El móvil/tablet/PC debe tener bloqueo de pantalla.
+- El navegador no debe compartirse con usuarios no autorizados.
+- Hay que hacer copias cifradas periódicas.
+- Si se pierde la contraseña maestra, no hay recuperación.
+- Si se borra el almacenamiento del navegador, se pierde la base local salvo que exista copia.
+- Para uso con datos reales, se recomienda revisión de protección de datos antes de implantarla.
 
-- Android/Chrome: menú ⋮ → **Añadir a pantalla de inicio**.
-- iPhone/iPad/Safari: Compartir → **Añadir a pantalla de inicio**.
+## Uso básico
 
-## Aviso
+1. Abrir la app.
+2. Crear la base local cifrada.
+3. Guardar la contraseña maestra en un lugar seguro.
+4. Crear fichas.
+5. Pulsar "Guardar cifrada" después de cada cambio.
+6. Exportar copias cifradas de forma periódica.
+7. Bloquear la app al terminar.
 
-No introducir datos reales de residentes durante la fase de prueba sin autorización previa y visto bueno de protección de datos.
+## Recomendaciones antes de usar en producción
+
+- Hacer el repositorio privado.
+- Revisar la app con la persona responsable de protección de datos.
+- Definir quién puede usar la tablet/equipo.
+- Activar bloqueo automático del sistema operativo.
+- Guardar copias cifradas en un lugar controlado.
+- No publicar la app en una URL pública con datos reales.
+
+## Archivos principales
+
+- `index.html`: estructura de la app.
+- `styles.css`: diseño visual e impresión.
+- `app.js`: base local, cifrado, fichas, copias y bloqueo.
+- `sw.js`: PWA y caché local de la app.
+- `manifest.webmanifest`: instalación en móvil/tablet.
