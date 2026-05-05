@@ -1,1 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img" aria-label="Diputación de Jaén"><rect width="760" height="420" fill="#ffffff"/><g transform="translate(60 44)"><path d="M178 0 C127 48 78 48 36 83 C13 102 5 128 2 153 C45 121 92 125 132 105 C163 90 185 62 210 0 Z" fill="#6a9600"/><path d="M28 178 H142 V365 C142 394 119 417 91 417 H38 C74 389 82 365 82 332 V235 H28 Z" fill="#6a9600"/></g><g transform="translate(285 150)"><text x="0" y="0" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="500" letter-spacing="2" fill="#111111">DIPUTACIÓN</text><text x="0" y="86" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="500" letter-spacing="2" fill="#111111">DE JAÉN</text></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img" aria-label="Diputación de Jaén">
+  <rect width="760" height="420" rx="36" fill="#ffffff"/>
+  <g transform="translate(68 34) scale(0.82)">
+    <path d="M178 0 C127 48 78 48 36 83 C13 102 5 128 2 153 C45 121 92 125 132 105 C163 90 185 62 210 0 Z" fill="#6a9600"/>
+    <path d="M28 178 H142 V365 C142 394 119 417 91 417 H38 C74 389 82 365 82 332 V235 H28 Z" fill="#6a9600"/>
+  </g>
+  <g transform="translate(285 150)">
+    <text x="0" y="0" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="500" letter-spacing="2" fill="#111111">DIPUTACIÓN</text>
+    <text x="0" y="86" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="500" letter-spacing="2" fill="#111111">DE JAÉN</text>
+  </g>
+</svg>
