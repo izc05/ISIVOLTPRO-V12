@@ -7,51 +7,10 @@
   function ready(fn){ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
 
   ready(() => {
-    insertShell();
-    insertQrButtons();
     wireNavigation();
+    insertQrButtons();
     setScreen('home');
   });
-
-  function insertShell(){
-    const app = $('appView');
-    const hero = document.querySelector('.app-hero');
-    if(!app || !hero || $('moduleHome')) return;
-
-    const home = document.createElement('section');
-    home.id = 'moduleHome';
-    home.className = 'module-home no-print';
-    home.innerHTML = `
-      <div class="app-logo-mark" aria-hidden="true">ST</div>
-      <p class="eyebrow">Menú principal</p>
-      <h2>Residencia Santa Teresa</h2>
-      <p class="lead">Usa la barra inferior para moverte por la app. Cada apartado se abre en su propia pantalla.</p>`;
-    hero.after(home);
-
-    const title = document.createElement('section');
-    title.id = 'moduleTitle';
-    title.className = 'module-title no-print';
-    title.innerHTML = `<h2 id="moduleTitleText">Pantalla</h2><p id="moduleSubtitle" class="muted">Apartado de trabajo</p>`;
-    home.after(title);
-
-    const nav = document.createElement('nav');
-    nav.id = 'bottomNav';
-    nav.className = 'bottom-nav no-print';
-    nav.setAttribute('aria-label','Navegación principal');
-    nav.innerHTML = `
-      <button id="navHomeBtn" type="button" data-screen="home"><span>⌂</span><small>Inicio</small></button>
-      <button id="navFillBtn" type="button" data-screen="form"><span>✍️</span><small>Rellenar</small></button>
-      <button id="navDbBtn" type="button" data-screen="db"><span>📋</span><small>Base</small></button>
-      <button id="navSettingsBtn" type="button" data-screen="settings"><span>⚙️</span><small>Ajustes</small></button>
-      <button id="navQrBtn" type="button"><span>▦</span><small>QR</small></button>`;
-    document.body.appendChild(nav);
-
-    $('navHomeBtn').onclick = () => setScreen('home');
-    $('navFillBtn').onclick = () => { if(!currentFicha() && typeof clearForm === 'function') clearForm(); setScreen('form'); };
-    $('navDbBtn').onclick = () => setScreen('db');
-    $('navSettingsBtn').onclick = () => setScreen('settings');
-    $('navQrBtn').onclick = openScanner;
-  }
 
   function setScreen(screen){
     const app = $('appView');
@@ -72,8 +31,16 @@
     document.querySelectorAll('#bottomNav button').forEach(btn => btn.classList.toggle('active', btn.dataset.screen === screen));
     window.scrollTo({top:0,behavior:'smooth'});
   }
+  window.setSantaScreen = setScreen;
 
   function wireNavigation(){
+    const navHome = $('navHomeBtn'), navFill = $('navFillBtn'), navDb = $('navDbBtn'), navSettings = $('navSettingsBtn'), navQr = $('navQrBtn');
+    if(navHome) navHome.onclick = () => setScreen('home');
+    if(navFill) navFill.onclick = () => { if(!currentFicha() && typeof clearForm === 'function') clearForm(); setScreen('form'); };
+    if(navDb) navDb.onclick = () => setScreen('db');
+    if(navSettings) navSettings.onclick = () => setScreen('settings');
+    if(navQr) navQr.onclick = openScanner;
+
     const heroNew = $('heroNewFichaBtn');
     if(heroNew) heroNew.onclick = () => { if(typeof clearForm === 'function') clearForm(); setScreen('form'); };
 
@@ -103,11 +70,6 @@
     if(previewPrint){
       const old = previewPrint.onclick;
       previewPrint.onclick = e => { setScreen('preview'); if(old) old.call(previewPrint,e); };
-    }
-
-    const list = $('residentList');
-    if(list){
-      list.addEventListener('click', () => setTimeout(() => setScreen('form'), 80));
     }
   }
 
