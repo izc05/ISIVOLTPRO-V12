@@ -2,7 +2,7 @@
   'use strict';
 
   const $ = id => document.getElementById(id);
-  const PEOPLE_VERSION = window.SANTA_TERESA_APP_VERSION || '3.21.0-report-autocomplete';
+  const PEOPLE_VERSION = window.SANTA_TERESA_APP_VERSION || '3.22.0-card-avatars';
 
   function ready(fn){ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
 
