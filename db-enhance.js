@@ -65,6 +65,19 @@
       if(btn) shell.appendChild(btn);
     }
     if(btn){
+      if(!shell.querySelector('.resident-avatar')){
+        const avatar = document.createElement('div');
+        avatar.className = 'resident-avatar';
+        if(ficha.photoDataUrl){
+          const img = document.createElement('img');
+          img.src = ficha.photoDataUrl;
+          img.alt = '';
+          avatar.appendChild(img);
+        }else{
+          avatar.textContent = initials(ficha.nombre || '');
+        }
+        shell.insertBefore(avatar, btn);
+      }
       btn.classList.add('resident-card-main');
       const badge = document.createElement('em');
       badge.className = 'status-badge ' + statusClass(ficha.estado || 'Activa');
@@ -129,5 +142,9 @@
     if(status === 'Revisión') return 'review';
     if(status === 'Archivada') return 'archived';
     return 'active';
+  }
+  function initials(name){
+    const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+    return ((parts[0] || '?')[0] || '?') + ((parts[1] || '')[0] || '');
   }
 })();
