@@ -1,7 +1,7 @@
-const CACHE_NAME = 'santa-teresa-local-secure-v6-bottom-real';
+const CACHE_NAME = 'santa-teresa-local-secure-v7-delivery-tablet';
 const APP_SHELL = [
   './',
-  './index.html?v=v6-bottom-real',
+  './index.html?v=v7-delivery',
   './styles.css',
   './extras.css',
   './app.js',
@@ -33,6 +33,6 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v6-bottom-real') || caches.match('./index.html')))
+      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v7-delivery') || caches.match('./index.html')))
   );
 });
