@@ -32,6 +32,7 @@
           <p>Busca por nombre, habitacion o zona. Tambien puedes escanear su QR.</p>
         </div>
         <button id="reportScanQrBtn" type="button" class="secondary">Escanear QR</button>
+        <button id="reportChangeUserBtn" type="button" class="secondary">Cambiar usuario</button>
       </div>
       <div class="report-selector-search">
         <label for="reportUserSearch">Usuario</label>
@@ -45,6 +46,12 @@
     $('reportScanQrBtn').onclick = () => {
       if(typeof window.openSantaQrScanner === 'function') window.openSantaQrScanner();
       else $('navDbBtn')?.click();
+    };
+    $('reportChangeUserBtn').onclick = () => {
+      panel.classList.remove('has-selection');
+      $('reportUserSearch').value = '';
+      $('reportUserSearch').focus();
+      refreshReportSelector();
     };
     refreshReportSelector();
   }
@@ -65,7 +72,12 @@
 
     const q = ($('reportUserSearch')?.value || '').trim().toLowerCase();
     if(!q){
-      list.innerHTML = '';
+      list.innerHTML = `
+        <article class="report-empty report-hint">
+          <strong>Busca un usuario por nombre, habitacion o zona</strong>
+          <span>Tambien puedes usar Escanear QR para cargarlo automaticamente.</span>
+        </article>
+      `;
       refreshSelectedUserState();
       return;
     }
