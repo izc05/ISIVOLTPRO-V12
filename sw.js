@@ -1,7 +1,7 @@
-const CACHE_NAME = 'santa-teresa-local-secure-v25-video-auth';
+const CACHE_NAME = 'santa-teresa-local-secure-v26-ui-cleanup';
 const APP_SHELL = [
   './',
-  './index.html?v=v25-video-auth',
+  './index.html?v=v26-ui-cleanup',
   './styles.css',
   './extras.css',
   './guided-form.css',
@@ -43,6 +43,6 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v25-video-auth') || caches.match('./index.html')))
+      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v26-ui-cleanup') || caches.match('./index.html')))
   );
 });

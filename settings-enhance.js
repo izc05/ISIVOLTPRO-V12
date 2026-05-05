@@ -2,7 +2,7 @@
   'use strict';
 
   const $ = id => document.getElementById(id);
-  const PEOPLE_VERSION = window.SANTA_TERESA_APP_VERSION || '3.14.0-video-auth';
+  const PEOPLE_VERSION = window.SANTA_TERESA_APP_VERSION || '3.15.0-ui-cleanup';
 
   function ready(fn){ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
 

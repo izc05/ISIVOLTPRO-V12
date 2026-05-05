@@ -64,13 +64,19 @@
     if(!list || typeof state === 'undefined') return;
 
     const q = ($('reportUserSearch')?.value || '').trim().toLowerCase();
+    if(!q){
+      list.innerHTML = '';
+      refreshSelectedUserState();
+      return;
+    }
+
     const people = (state.residents || []).filter(person => `${person.nombre || ''} ${person.habitacion || ''} ${person.ala || ''} ${person.estado || ''}`.toLowerCase().includes(q));
 
     if(!people.length){
       list.innerHTML = `
         <article class="report-empty">
-          <strong>No hay usuarios que mostrar</strong>
-          <span>Crea primero un usuario con sus datos basicos.</span>
+          <strong>No se encontro ese usuario</strong>
+          <span>Revisa el nombre, habitacion o zona. Si no existe, puedes crearlo.</span>
           <button type="button" id="reportCreateUserBtn">Crear usuario</button>
         </article>
       `;

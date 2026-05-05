@@ -30,6 +30,7 @@
 .screen-user .search-card,
 .screen-user .list-title,
 .screen-user .resident-list,
+.screen-user .vault-stats,
 .screen-user .secure-panel,
 .screen-user .toolbar,
 .screen-user #dbFilterBar{
@@ -212,6 +213,35 @@
   border-radius:18px!important;
 }
 
+.screen-form .photo-card{
+  grid-column:1/-1;
+  display:grid;
+  grid-template-columns:minmax(260px,360px) minmax(0,1fr);
+  gap:16px;
+  align-items:start;
+}
+
+.screen-form .photo-card h3,
+.screen-form .photo-card .note{
+  grid-column:2;
+}
+
+.screen-form .photo-card h3{
+  margin-top:6px;
+}
+
+.screen-form .photo-card .photo-box{
+  grid-column:1;
+  grid-row:1 / span 4;
+  min-height:340px;
+}
+
+.screen-form .photo-card input,
+.screen-form .photo-card button{
+  grid-column:2;
+  max-width:360px;
+}
+
 .people-registry .people-picker{
   margin-top:12px;
 }
@@ -252,5 +282,21 @@
 
   .screen-user .sidebar{
     width:100%;
+  }
+
+  .screen-form .photo-card{
+    grid-template-columns:1fr;
+  }
+
+  .screen-form .photo-card h3,
+  .screen-form .photo-card .note,
+  .screen-form .photo-card input,
+  .screen-form .photo-card button{
+    grid-column:1;
+  }
+
+  .screen-form .photo-card .photo-box{
+    grid-row:auto;
+    min-height:300px;
   }
 }

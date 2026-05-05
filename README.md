@@ -58,6 +58,14 @@ Esta app mejora mucho la privacidad frente al prototipo inicial, pero sigue sien
 - Guardar copias cifradas en un lugar controlado.
 - No publicar la app en una URL pública con datos reales.
 
+## Privacidad en demos y desarrollo
+
+- No subir datos reales a GitHub.
+- No usar nombres reales en demos, pruebas o capturas.
+- Usar una tablet controlada, con bloqueo de pantalla activo.
+- Hacer copias cifradas periodicas.
+- Ver `DATABASE_V2.md` para la evolucion prevista de usuarios, informes, adjuntos e historial cifrado.
+
 ## Archivos principales
 
 - `index.html`: estructura de la app.

@@ -2,7 +2,7 @@
   "name": "Residencia Santa Teresa · Cuidados",
   "short_name": "Santa Teresa",
   "description": "PWA local-first para crear, guardar y modificar fichas de cuidados en una base local cifrada en tablet.",
-  "start_url": "./index.html?v=v25-video-auth",
+  "start_url": "./index.html?v=v26-ui-cleanup",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
