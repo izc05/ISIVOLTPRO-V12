@@ -1,20 +1,20 @@
-const CACHE_NAME = 'santa-teresa-local-secure-v28-report-search-qr';
+const CACHE_NAME = 'santa-teresa-local-secure-v29-visual-legal';
 const APP_SHELL = [
   './',
-  './index.html?v=v28-report-search-qr',
-  './styles.css?v=v28-report-search-qr',
-  './extras.css?v=v28-report-search-qr',
-  './guided-form.css?v=v28-report-search-qr',
-  './auth-cover.css?v=v28-report-search-qr',
-  './app-flow.css?v=v28-report-search-qr',
-  './db-cards.css?v=v28-report-search-qr',
-  './settings-simple.css?v=v28-report-search-qr',
-  './app.js?v=v28-report-search-qr',
-  './qr-tools.js?v=v28-report-search-qr',
-  './guided-form.js?v=v28-report-search-qr',
-  './db-enhance.js?v=v28-report-search-qr',
-  './settings-enhance.js?v=v28-report-search-qr',
-  './report-workflow.js?v=v28-report-search-qr',
+  './index.html?v=v29-visual-legal',
+  './styles.css?v=v29-visual-legal',
+  './extras.css?v=v29-visual-legal',
+  './guided-form.css?v=v29-visual-legal',
+  './auth-cover.css?v=v29-visual-legal',
+  './app-flow.css?v=v29-visual-legal',
+  './db-cards.css?v=v29-visual-legal',
+  './settings-simple.css?v=v29-visual-legal',
+  './app.js?v=v29-visual-legal',
+  './qr-tools.js?v=v29-visual-legal',
+  './guided-form.js?v=v29-visual-legal',
+  './db-enhance.js?v=v29-visual-legal',
+  './settings-enhance.js?v=v29-visual-legal',
+  './report-workflow.js?v=v29-visual-legal',
   './manifest.webmanifest',
   './assets/app-icon.svg',
   './assets/diputacion-jaen-logo.svg',
@@ -43,6 +43,6 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v28-report-search-qr') || caches.match('./index.html')))
+      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v29-visual-legal') || caches.match('./index.html')))
   );
 });

@@ -121,6 +121,33 @@
   border-color:#d8ead5!important;
 }
 
+.screen-settings .settings-legal-card{
+  padding:16px!important;
+  border:1px solid #d8ead5!important;
+  border-radius:20px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+
+.screen-settings .settings-legal-card summary{
+  cursor:pointer;
+  color:#164f25;
+  font-size:20px;
+  font-weight:950;
+}
+
+.screen-settings .settings-legal-card div{
+  display:grid;
+  gap:8px;
+  margin-top:12px;
+  color:#665d56;
+  line-height:1.45;
+}
+
+.screen-settings .settings-legal-card p{
+  margin:0;
+}
+
 @media(max-width:760px){
   .screen-settings .settings-grid{
     grid-template-columns:1fr!important;

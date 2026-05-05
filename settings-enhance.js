@@ -2,7 +2,7 @@
   'use strict';
 
   const $ = id => document.getElementById(id);
-  const PEOPLE_VERSION = window.SANTA_TERESA_APP_VERSION || '3.17.0-report-search-qr';
+  const PEOPLE_VERSION = window.SANTA_TERESA_APP_VERSION || '3.18.0-visual-legal';
 
   function ready(fn){ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
 
@@ -32,6 +32,11 @@
         <article class="settings-card warning-card"><h3>Mantenimiento</h3><p>Usa esta zona solo si sabes lo que haces.</p><button type="button" class="danger" id="settingsWipeBtn">Borrar base local</button><small>Antes de borrar, exporta una copia cifrada si necesitas conservar los datos.</small></article>
       </div>
       <article class="settings-version-card"><strong>Versión instalada</strong><span id="settingsVersionText">—</span><small>Aplicación local-first · offline · base cifrada en IndexedDB</small></article>`;
+    const legal = document.createElement('details');
+    legal.className = 'settings-legal-card';
+    legal.open = true;
+    legal.innerHTML = `<summary>Documento legal y privacidad</summary><div><p><strong>Uso previsto.</strong> Herramienta local de apoyo para crear fichas e informes internos de cuidados en una tablet controlada por la residencia.</p><p><strong>Datos sensibles.</strong> No introduzcas datos reales en demos, capturas o repositorios. La informacion debe tratarse conforme a la normativa aplicable y a las instrucciones de la entidad responsable.</p><p><strong>Seguridad.</strong> Mantener bloqueo de pantalla, acceso limitado al dispositivo, copias cifradas periodicas y custodia separada de la contrasena maestra.</p><p><strong>Sin recuperacion.</strong> Si se pierde la contrasena maestra no se puede recuperar la base cifrada.</p></div>`;
+    dashboard.querySelector('.settings-version-card')?.insertAdjacentElement('beforebegin', legal);
     const securePanel = document.querySelector('.secure-panel');
     if(securePanel) securePanel.insertAdjacentElement('beforebegin', dashboard); else sidebar.appendChild(dashboard);
     $('settingsLockNowBtn').onclick = () => $('lockBtn')?.click();

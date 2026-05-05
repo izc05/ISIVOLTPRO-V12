@@ -10,13 +10,13 @@
 .resident-card-shell{
   display:grid;
   grid-template-columns:minmax(0,1fr) auto;
-  gap:12px;
+  gap:14px;
   align-items:center;
-  padding:14px;
+  padding:15px 16px;
   border:1px solid #d8ead5;
-  border-radius:22px;
-  background:linear-gradient(180deg,#fff,#fffdf8);
-  box-shadow:0 12px 28px rgba(48,39,30,.08);
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 10px 24px rgba(48,39,30,.07);
   position:relative;
   overflow:hidden;
 }
@@ -53,7 +53,7 @@
   display:block;
   margin-bottom:5px;
   color:#292725;
-  font-size:20px;
+  font-size:22px;
   line-height:1.1;
 }
 
@@ -95,15 +95,16 @@
 }
 
 .resident-card-actions{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(92px,1fr));
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
   gap:8px;
-  min-width:200px;
+  min-width:310px;
 }
 
 .resident-card-actions button{
   min-height:42px;
-  padding:9px 10px;
+  padding:9px 13px;
   border-radius:14px;
   background:#fff;
   border:1px solid #d8d0c7;
@@ -111,6 +112,11 @@
   color:#315064;
   font-size:13px;
   font-weight:950;
+}
+
+.resident-card-actions button[data-action="qr"],
+.resident-card-actions button[data-action="pdf"]{
+  min-width:64px;
 }
 
 .resident-card-actions button[data-action="view"],
@@ -134,6 +140,7 @@
   }
 
   .resident-card-actions{
+    display:grid;
     grid-template-columns:repeat(4,1fr);
     min-width:0;
   }
