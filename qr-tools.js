@@ -9,6 +9,8 @@
   ready(() => {
     wireNavigation();
     insertQrButtons();
+    injectPrintQrBadge();
+    setInterval(refreshPrintQrBadge, 900);
     setScreen('home');
   });
 
@@ -30,6 +32,7 @@
     if($('moduleSubtitle')) $('moduleSubtitle').textContent = titles[screen]?.[1] || '';
     document.querySelectorAll('#bottomNav button').forEach(btn => btn.classList.toggle('active', btn.dataset.screen === screen));
     window.scrollTo({top:0,behavior:'smooth'});
+    setTimeout(refreshPrintQrBadge, 80);
   }
   window.setSantaScreen = setScreen;
 
@@ -47,7 +50,7 @@
     const newBtn = $('newFichaBtn');
     if(newBtn){
       const old = newBtn.onclick;
-      newBtn.onclick = e => { if(old) old.call(newBtn,e); setScreen('form'); };
+      newBtn.onclick = e => { if(old) old.call(newBtn,e); setScreen('form'); setTimeout(refreshPrintQrBadge, 80); };
     }
 
     const previewBtn = $('previewFichaBtn');
@@ -57,6 +60,7 @@
         if(old) old.call(previewBtn,e);
         if(typeof setStep === 'function') setStep(3);
         setScreen('preview');
+        refreshPrintQrBadge();
       };
     }
 
@@ -69,7 +73,7 @@
     const previewPrint = $('previewPrintBtn');
     if(previewPrint){
       const old = previewPrint.onclick;
-      previewPrint.onclick = e => { setScreen('preview'); if(old) old.call(previewPrint,e); };
+      previewPrint.onclick = e => { setScreen('preview'); refreshPrintQrBadge(); if(old) old.call(previewPrint,e); };
     }
   }
 
@@ -104,6 +108,31 @@
       qr.onclick = showCurrentQr;
       previewActions.insertBefore(qr, previewActions.firstChild);
     }
+  }
+
+  function injectPrintQrBadge(){
+    const header = document.querySelector('#printSheet .print-header');
+    if(!header || $('printQrBadge')) return;
+    const badge = document.createElement('aside');
+    badge.id = 'printQrBadge';
+    badge.className = 'print-qr-badge';
+    badge.innerHTML = '<div class="print-qr-placeholder">Guardar ficha<br>para QR</div><small>QR ficha</small>';
+    header.appendChild(badge);
+    refreshPrintQrBadge();
+  }
+
+  function refreshPrintQrBadge(){
+    const badge = $('printQrBadge');
+    if(!badge) return;
+    const ficha = currentFicha();
+    if(!ficha || !ficha.id){
+      badge.classList.add('empty');
+      badge.innerHTML = '<div class="print-qr-placeholder">Guardar ficha<br>para QR</div><small>QR ficha</small>';
+      return;
+    }
+    badge.classList.remove('empty');
+    const code = QR_PREFIX + ficha.id;
+    badge.innerHTML = `<div class="print-qr-svg">${makeQrSvg(code)}</div><small>Escanear ficha</small>`;
   }
 
   function currentFicha(){
@@ -146,7 +175,7 @@
   function printQr(ficha, code){
     const w = window.open('', '_blank', 'noopener,noreferrer,width=520,height=720');
     if(!w){ alert('El navegador ha bloqueado la ventana de impresión.'); return; }
-    w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>QR ${escapeHtml(ficha.nombre||'ficha')}</title></head><body><main class="qr-print-page"><h1>${escapeHtml(ficha.nombre||'Ficha')}</h1><p>${ficha.habitacion ? 'Habitación ' + escapeHtml(ficha.habitacion) : 'Residencia Santa Teresa'}</p>${makeQrSvg(code)}<p>Código interno: ${escapeHtml(code)}</p><p>Escanear desde la app desbloqueada.</p></main><style>.qr-print-page{font-family:Arial,sans-serif;text-align:center;padding:24px}.qr-print-page svg{width:260px;max-width:90vw}.qr-print-page h1{font-size:22px;margin:8px 0}.qr-print-page p{color:#555}</style></body></html>`);
+    w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>QR ${escapeHtml(ficha.nombre||'ficha')}</title></head><body><main class="qr-print-page"><div class="qr-card"><h1>${escapeHtml(ficha.nombre||'Ficha')}</h1><p>${ficha.habitacion ? 'Habitación ' + escapeHtml(ficha.habitacion) : 'Residencia Santa Teresa'}</p>${makeQrSvg(code)}<p class="code">${escapeHtml(code)}</p><p>Escanear desde la app desbloqueada.</p></div></main><style>body{margin:0;background:#fff;font-family:Arial,sans-serif}.qr-print-page{display:grid;place-items:center;min-height:100vh;padding:24px}.qr-card{text-align:center;border:2px solid #b8dbb7;border-radius:24px;padding:24px;max-width:360px}.qr-card svg{width:260px;max-width:90vw}.qr-card h1{font-size:22px;margin:8px 0;color:#164f25}.qr-card p{color:#555}.qr-card .code{font-family:monospace;font-size:12px;word-break:break-all;background:#e9f6e9;border-radius:10px;padding:8px}</style></body></html>`);
     w.document.close();
     setTimeout(() => { w.focus(); w.print(); }, 250);
   }
