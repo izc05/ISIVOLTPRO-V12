@@ -43,6 +43,13 @@
 
     editor.insertBefore(panel, editor.firstChild);
     $('reportUserSearch').addEventListener('input', refreshReportSelector);
+    $('reportUserSearch').addEventListener('keydown', event => {
+      if(event.key !== 'Enter') return;
+      const first = $('reportUserList')?.querySelector('.report-user-card');
+      if(!first) return;
+      event.preventDefault();
+      chooseReportUser(first.dataset.id);
+    });
     $('reportScanQrBtn').onclick = () => {
       if(typeof window.openSantaQrScanner === 'function') window.openSantaQrScanner();
       else $('navDbBtn')?.click();
@@ -82,7 +89,7 @@
       return;
     }
 
-    const people = (state.residents || []).filter(person => `${person.nombre || ''} ${person.habitacion || ''} ${person.ala || ''} ${person.estado || ''}`.toLowerCase().includes(q));
+    const people = (state.residents || []).filter(person => `${person.nombre || ''} ${person.habitacion || ''} ${person.ala || ''} ${person.estado || ''}`.toLowerCase().includes(q)).slice(0, 6);
 
     if(!people.length){
       list.innerHTML = `
@@ -106,22 +113,37 @@
           <strong>${escapeHtml(person.nombre || 'Sin nombre')}</strong>
           <span>${escapeHtml([person.habitacion ? 'Hab. ' + person.habitacion : '', person.ala || '', person.estado || 'Activa'].filter(Boolean).join(' - '))}</span>
         </div>
-        <button type="button">Crear informe</button>
+        <button type="button">Usar usuario</button>
       </article>
     `).join('');
 
-    list.querySelectorAll('.report-user-card button').forEach(button => {
-      button.onclick = () => {
-        const id = button.closest('.report-user-card')?.dataset?.id;
-        if(!id) return;
-        if(typeof selectFicha === 'function') selectFicha(id, false);
-        if(typeof setStep === 'function') setStep(0);
-        refreshSelectedUserState();
-        document.querySelector('.guided-hero')?.scrollIntoView({behavior:'smooth', block:'start'});
+    list.querySelectorAll('.report-user-card').forEach(card => {
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.onclick = event => {
+        event.preventDefault();
+        chooseReportUser(card.dataset.id);
+      };
+      card.onkeydown = event => {
+        if(event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        chooseReportUser(card.dataset.id);
       };
     });
 
     refreshSelectedUserState();
+  }
+
+  function chooseReportUser(id){
+    if(!id || typeof state === 'undefined') return;
+    const selected = (state.residents || []).find(person => person.id === id);
+    if(!selected) return;
+    if(typeof selectFicha === 'function') selectFicha(id, false);
+    if(typeof setStep === 'function') setStep(0);
+    const input = $('reportUserSearch');
+    if(input) input.value = [selected.nombre || 'Sin nombre', selected.habitacion ? 'Hab. ' + selected.habitacion : ''].filter(Boolean).join(' - ');
+    refreshSelectedUserState();
+    document.querySelector('.wizard-card')?.scrollIntoView({behavior:'smooth', block:'start'});
   }
 
   function refreshSelectedUserState(){
