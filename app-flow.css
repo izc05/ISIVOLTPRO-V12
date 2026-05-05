@@ -94,6 +94,15 @@
   box-shadow:none;
 }
 
+.report-user-card{
+  cursor:pointer;
+}
+
+.report-user-card:focus-visible{
+  outline:3px solid rgba(47,125,59,.22);
+  outline-offset:2px;
+}
+
 .report-user-card strong,
 .report-empty strong{
   display:block;
