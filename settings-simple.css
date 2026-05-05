@@ -52,6 +52,7 @@
 }
 
 .screen-settings .danger-zone{
+  display:none!important;
   border-color:#efd0cb!important;
   background:#fffaf8!important;
 }
