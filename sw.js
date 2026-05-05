@@ -1,4 +1,4 @@
-const CACHE_NAME = 'santa-teresa-local-secure-v3-qr';
+const CACHE_NAME = 'santa-teresa-local-secure-v4-screens';
 const APP_SHELL = [
   './',
   './index.html',

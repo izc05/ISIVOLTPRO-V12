@@ -7,12 +7,98 @@
   function ready(fn){ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
 
   ready(() => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'extras.css';
-    document.head.appendChild(link);
+    insertScreenShell();
     insertButtons();
+    patchNavigation();
+    setScreen('home');
   });
+
+  function insertScreenShell(){
+    const app = $('appView');
+    const hero = document.querySelector('.app-hero');
+    if(!app || !hero || $('moduleHome')) return;
+
+    const home = document.createElement('section');
+    home.id = 'moduleHome';
+    home.className = 'module-home no-print';
+    home.innerHTML = `
+      <p class="eyebrow">Menú principal</p>
+      <h2>Residencia Santa Teresa</h2>
+      <p class="lead">Elige qué quieres hacer. Cada apartado tiene su propia pantalla para que la app sea más clara en móvil y tablet.</p>
+      <div class="module-actions">
+        <button id="screenFillBtn" class="module-tile primary-tile" type="button"><span class="ico">✍️</span><strong>Rellenar ficha</strong><span>Crear una ficha nueva con pasos guiados.</span></button>
+        <button id="screenDbBtn" class="module-tile" type="button"><span class="ico">📋</span><strong>Base de datos</strong><span>Buscar, abrir y modificar fichas guardadas.</span></button>
+        <button id="screenSettingsBtn" class="module-tile" type="button"><span class="ico">⚙️</span><strong>Configuración</strong><span>Copias, contraseña y bloqueo de la app.</span></button>
+        <button id="screenQrBtn" class="module-tile" type="button"><span class="ico">▦</span><strong>Escanear QR</strong><span>Abrir una ficha rápidamente con la cámara.</span></button>
+      </div>`;
+    hero.after(home);
+
+    const title = document.createElement('section');
+    title.id = 'moduleTitle';
+    title.className = 'module-title no-print';
+    title.innerHTML = `<h2 id="moduleTitleText">Pantalla</h2><p id="moduleSubtitle" class="muted">Apartado de trabajo</p>`;
+    home.after(title);
+
+    const back = document.createElement('button');
+    back.id = 'moduleBackBtn';
+    back.className = 'secondary module-back no-print';
+    back.type = 'button';
+    back.textContent = 'Inicio';
+    const actions = document.querySelector('.hero-actions');
+    if(actions) actions.prepend(back);
+
+    $('screenFillBtn').onclick = () => { if(typeof clearForm === 'function') clearForm(); setScreen('form'); };
+    $('screenDbBtn').onclick = () => setScreen('db');
+    $('screenSettingsBtn').onclick = () => setScreen('settings');
+    $('screenQrBtn').onclick = openScanner;
+    back.onclick = () => setScreen('home');
+  }
+
+  function setScreen(screen){
+    const app = $('appView');
+    if(!app) return;
+    app.classList.remove('screen-home','screen-form','screen-db','screen-settings','screen-preview','preview-mode');
+    app.classList.add('screen-' + screen);
+    const titles = {
+      home:['Menú principal','Elige una opción para trabajar.'],
+      form:['Rellenar ficha','Completa la ficha paso a paso.'],
+      db:['Base de datos','Busca, abre o modifica fichas guardadas.'],
+      settings:['Configuración','Copias cifradas, contraseña y seguridad local.'],
+      preview:['Vista final','Ficha con el formato visual de impresión.']
+    };
+    if($('moduleTitleText')) $('moduleTitleText').textContent = titles[screen]?.[0] || 'Pantalla';
+    if($('moduleSubtitle')) $('moduleSubtitle').textContent = titles[screen]?.[1] || '';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function patchNavigation(){
+    const heroNew = $('heroNewFichaBtn');
+    if(heroNew) heroNew.onclick = () => { if(typeof clearForm === 'function') clearForm(); setScreen('form'); };
+
+    const newBtn = $('newFichaBtn');
+    if(newBtn){
+      const old = newBtn.onclick;
+      newBtn.onclick = e => { if(old) old.call(newBtn,e); setScreen('form'); };
+    }
+
+    const previewBtn = $('previewFichaBtn');
+    if(previewBtn){
+      const old = previewBtn.onclick;
+      previewBtn.onclick = e => { if(old) old.call(previewBtn,e); setScreen('preview'); };
+    }
+
+    const backToForm = $('backToFormBtn');
+    if(backToForm){
+      const old = backToForm.onclick;
+      backToForm.onclick = e => { if(old) old.call(backToForm,e); setScreen('form'); };
+    }
+
+    const previewPrint = $('previewPrintBtn');
+    if(previewPrint){
+      const old = previewPrint.onclick;
+      previewPrint.onclick = e => { setScreen('preview'); if(old) old.call(previewPrint,e); };
+    }
+  }
 
   function insertButtons(){
     const toolbar = document.querySelector('.toolbar');
@@ -87,7 +173,7 @@
   function printQr(ficha, code){
     const w = window.open('', '_blank', 'noopener,noreferrer,width=520,height=720');
     if(!w){ alert('El navegador ha bloqueado la ventana de impresión.'); return; }
-    w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>QR ${escapeHtml(ficha.nombre||'ficha')}</title></head><body><main class="qr-print-page"><h1>${escapeHtml(ficha.nombre||'Ficha')}</h1><p>${ficha.habitacion ? 'Habitación ' + escapeHtml(ficha.habitacion) : 'Residencia Santa Teresa'}</p>${makeQrSvg(code)}<p>Código interno: ${escapeHtml(code)}</p><p>Escanear desde la app desbloqueada.</p></main><style>${document.querySelector('style')?.textContent || ''}.qr-print-page{font-family:Arial,sans-serif;text-align:center;padding:24px}.qr-print-page svg{width:260px;max-width:90vw}.qr-print-page h1{font-size:22px;margin:8px 0}.qr-print-page p{color:#555}</style></body></html>`);
+    w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>QR ${escapeHtml(ficha.nombre||'ficha')}</title></head><body><main class="qr-print-page"><h1>${escapeHtml(ficha.nombre||'Ficha')}</h1><p>${ficha.habitacion ? 'Habitación ' + escapeHtml(ficha.habitacion) : 'Residencia Santa Teresa'}</p>${makeQrSvg(code)}<p>Código interno: ${escapeHtml(code)}</p><p>Escanear desde la app desbloqueada.</p></main><style>.qr-print-page{font-family:Arial,sans-serif;text-align:center;padding:24px}.qr-print-page svg{width:260px;max-width:90vw}.qr-print-page h1{font-size:22px;margin:8px 0}.qr-print-page p{color:#555}</style></body></html>`);
     w.document.close();
     setTimeout(() => { w.focus(); w.print(); }, 250);
   }
@@ -159,6 +245,7 @@
     if(!ficha){ alert('No encuentro esta ficha en la base local de este dispositivo.'); return; }
     selectFicha(id, false);
     if(typeof setStep === 'function') setStep(3);
+    setScreen('preview');
     if(typeof status === 'function') status('appStatus', 'Ficha abierta desde QR.', 'ok');
   }
 
@@ -184,7 +271,7 @@
     const bytes = Array.from(new TextEncoder().encode(text));
     if(bytes.length > 48) throw new Error('Texto QR demasiado largo para esta versión.');
     const bits = [];
-    pushBits(bits, 0b0100, 4); // byte mode
+    pushBits(bits, 0b0100, 4);
     pushBits(bits, bytes.length, 8);
     bytes.forEach(b => pushBits(bits, b, 8));
     const maxBits = dataCodewords * 8;
@@ -249,7 +336,7 @@
     for(let i=8;i<15;i++) reserve(8,size-15+i);
   }
   function addFormatBits(set,size){
-    const bits='111011111000100'; // EC level L, mask 0
+    const bits='111011111000100';
     const b=i=>bits[i]==='1';
     for(let i=0;i<=5;i++) set(8,i,b(i),true);
     set(8,7,b(6),true); set(8,8,b(7),true); set(7,8,b(8),true);
