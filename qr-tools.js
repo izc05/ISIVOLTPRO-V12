@@ -7,13 +7,13 @@
   function ready(fn){ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
 
   ready(() => {
-    insertScreenShell();
-    insertButtons();
-    patchNavigation();
+    insertShell();
+    insertQrButtons();
+    wireNavigation();
     setScreen('home');
   });
 
-  function insertScreenShell(){
+  function insertShell(){
     const app = $('appView');
     const hero = document.querySelector('.app-hero');
     if(!app || !hero || $('moduleHome')) return;
@@ -22,15 +22,10 @@
     home.id = 'moduleHome';
     home.className = 'module-home no-print';
     home.innerHTML = `
+      <div class="app-logo-mark" aria-hidden="true">ST</div>
       <p class="eyebrow">Menú principal</p>
       <h2>Residencia Santa Teresa</h2>
-      <p class="lead">Elige qué quieres hacer. Cada apartado tiene su propia pantalla para que la app sea más clara en móvil y tablet.</p>
-      <div class="module-actions">
-        <button id="screenFillBtn" class="module-tile primary-tile" type="button"><span class="ico">✍️</span><strong>Rellenar ficha</strong><span>Crear una ficha nueva con pasos guiados.</span></button>
-        <button id="screenDbBtn" class="module-tile" type="button"><span class="ico">📋</span><strong>Base de datos</strong><span>Buscar, abrir y modificar fichas guardadas.</span></button>
-        <button id="screenSettingsBtn" class="module-tile" type="button"><span class="ico">⚙️</span><strong>Configuración</strong><span>Copias, contraseña y bloqueo de la app.</span></button>
-        <button id="screenQrBtn" class="module-tile" type="button"><span class="ico">▦</span><strong>Escanear QR</strong><span>Abrir una ficha rápidamente con la cámara.</span></button>
-      </div>`;
+      <p class="lead">Usa la barra inferior para moverte por la app. Cada apartado se abre en su propia pantalla.</p>`;
     hero.after(home);
 
     const title = document.createElement('section');
@@ -39,19 +34,23 @@
     title.innerHTML = `<h2 id="moduleTitleText">Pantalla</h2><p id="moduleSubtitle" class="muted">Apartado de trabajo</p>`;
     home.after(title);
 
-    const back = document.createElement('button');
-    back.id = 'moduleBackBtn';
-    back.className = 'secondary module-back no-print';
-    back.type = 'button';
-    back.textContent = 'Inicio';
-    const actions = document.querySelector('.hero-actions');
-    if(actions) actions.prepend(back);
+    const nav = document.createElement('nav');
+    nav.id = 'bottomNav';
+    nav.className = 'bottom-nav no-print';
+    nav.setAttribute('aria-label','Navegación principal');
+    nav.innerHTML = `
+      <button id="navHomeBtn" type="button" data-screen="home"><span>⌂</span><small>Inicio</small></button>
+      <button id="navFillBtn" type="button" data-screen="form"><span>✍️</span><small>Rellenar</small></button>
+      <button id="navDbBtn" type="button" data-screen="db"><span>📋</span><small>Base</small></button>
+      <button id="navSettingsBtn" type="button" data-screen="settings"><span>⚙️</span><small>Ajustes</small></button>
+      <button id="navQrBtn" type="button"><span>▦</span><small>QR</small></button>`;
+    document.body.appendChild(nav);
 
-    $('screenFillBtn').onclick = () => { if(typeof clearForm === 'function') clearForm(); setScreen('form'); };
-    $('screenDbBtn').onclick = () => setScreen('db');
-    $('screenSettingsBtn').onclick = () => setScreen('settings');
-    $('screenQrBtn').onclick = openScanner;
-    back.onclick = () => setScreen('home');
+    $('navHomeBtn').onclick = () => setScreen('home');
+    $('navFillBtn').onclick = () => { if(!currentFicha() && typeof clearForm === 'function') clearForm(); setScreen('form'); };
+    $('navDbBtn').onclick = () => setScreen('db');
+    $('navSettingsBtn').onclick = () => setScreen('settings');
+    $('navQrBtn').onclick = openScanner;
   }
 
   function setScreen(screen){
@@ -59,19 +58,22 @@
     if(!app) return;
     app.classList.remove('screen-home','screen-form','screen-db','screen-settings','screen-preview','preview-mode');
     app.classList.add('screen-' + screen);
+    if(screen === 'preview') app.classList.add('preview-mode');
+
     const titles = {
-      home:['Menú principal','Elige una opción para trabajar.'],
-      form:['Rellenar ficha','Completa la ficha paso a paso.'],
+      home:['Menú principal','Usa la barra inferior para moverte por la app.'],
+      form:['Rellenar ficha','Completa la ficha paso a paso y guarda los cambios.'],
       db:['Base de datos','Busca, abre o modifica fichas guardadas.'],
       settings:['Configuración','Copias cifradas, contraseña y seguridad local.'],
       preview:['Vista final','Ficha con el formato visual de impresión.']
     };
     if($('moduleTitleText')) $('moduleTitleText').textContent = titles[screen]?.[0] || 'Pantalla';
     if($('moduleSubtitle')) $('moduleSubtitle').textContent = titles[screen]?.[1] || '';
+    document.querySelectorAll('#bottomNav button').forEach(btn => btn.classList.toggle('active', btn.dataset.screen === screen));
     window.scrollTo({top:0,behavior:'smooth'});
   }
 
-  function patchNavigation(){
+  function wireNavigation(){
     const heroNew = $('heroNewFichaBtn');
     if(heroNew) heroNew.onclick = () => { if(typeof clearForm === 'function') clearForm(); setScreen('form'); };
 
@@ -84,7 +86,11 @@
     const previewBtn = $('previewFichaBtn');
     if(previewBtn){
       const old = previewBtn.onclick;
-      previewBtn.onclick = e => { if(old) old.call(previewBtn,e); setScreen('preview'); };
+      previewBtn.onclick = e => {
+        if(old) old.call(previewBtn,e);
+        if(typeof setStep === 'function') setStep(3);
+        setScreen('preview');
+      };
     }
 
     const backToForm = $('backToFormBtn');
@@ -98,9 +104,14 @@
       const old = previewPrint.onclick;
       previewPrint.onclick = e => { setScreen('preview'); if(old) old.call(previewPrint,e); };
     }
+
+    const list = $('residentList');
+    if(list){
+      list.addEventListener('click', () => setTimeout(() => setScreen('form'), 80));
+    }
   }
 
-  function insertButtons(){
+  function insertQrButtons(){
     const toolbar = document.querySelector('.toolbar');
     if(toolbar && !$('scanQrBtn')){
       const scan = document.createElement('button');
@@ -256,113 +267,35 @@
     return m ? m[1] : '';
   }
 
-  function closeQrModal(){
-    const old = $('qrModal');
-    if(old) old.remove();
-  }
+  function closeQrModal(){ const old = $('qrModal'); if(old) old.remove(); }
+  function escapeHtml(str){ return String(str||'').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch])); }
 
-  function escapeHtml(str){
-    return String(str||'').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
-  }
-
-  // Generador QR local sin servicios externos: QR versión 3-L, modo byte, máscara 0.
   function makeQrSvg(text){
     const size = 29, dataCodewords = 55, eccCodewords = 15;
     const bytes = Array.from(new TextEncoder().encode(text));
     if(bytes.length > 48) throw new Error('Texto QR demasiado largo para esta versión.');
     const bits = [];
-    pushBits(bits, 0b0100, 4);
-    pushBits(bits, bytes.length, 8);
-    bytes.forEach(b => pushBits(bits, b, 8));
-    const maxBits = dataCodewords * 8;
-    for(let i=0; i<4 && bits.length<maxBits; i++) bits.push(0);
-    while(bits.length % 8) bits.push(0);
-    const data = [];
-    for(let i=0; i<bits.length; i+=8) data.push(bits.slice(i,i+8).reduce((a,b)=>(a<<1)|b,0));
+    pushBits(bits, 0b0100, 4); pushBits(bits, bytes.length, 8); bytes.forEach(b => pushBits(bits, b, 8));
+    const maxBits = dataCodewords * 8; for(let i=0; i<4 && bits.length<maxBits; i++) bits.push(0); while(bits.length % 8) bits.push(0);
+    const data = []; for(let i=0; i<bits.length; i+=8) data.push(bits.slice(i,i+8).reduce((a,b)=>(a<<1)|b,0));
     for(let pad=0; data.length<dataCodewords; pad++) data.push(pad%2 ? 0x11 : 0xec);
-    const ecc = reedSolomon(data, eccCodewords);
-    const allCodewords = data.concat(ecc);
-    const m = Array.from({length:size}, () => Array(size).fill(false));
-    const reserved = Array.from({length:size}, () => Array(size).fill(false));
+    const ecc = reedSolomon(data, eccCodewords), allCodewords = data.concat(ecc);
+    const m = Array.from({length:size}, () => Array(size).fill(false)); const reserved = Array.from({length:size}, () => Array(size).fill(false));
     const set = (x,y,v,res=true) => { if(x<0||y<0||x>=size||y>=size) return; m[y][x]=!!v; if(res) reserved[y][x]=true; };
     const reserve = (x,y) => { if(x>=0&&y>=0&&x<size&&y<size) reserved[y][x]=true; };
-    addFinder(set,0,0); addFinder(set,size-7,0); addFinder(set,0,size-7);
-    for(let i=8;i<size-8;i++){ set(i,6,i%2===0); set(6,i,i%2===0); }
-    addAlignment(set,22,22);
-    set(8,21,true);
-    reserveFormat(reserve,size);
-    const dataBits=[]; allCodewords.forEach(cw=>pushBits(dataBits,cw,8));
-    let bit=0, upward=true;
-    for(let x=size-1; x>0; x-=2){
-      if(x===6) x--;
-      for(let yi=0; yi<size; yi++){
-        const y = upward ? size-1-yi : yi;
-        for(let dx=0; dx<2; dx++){
-          const xx = x-dx;
-          if(reserved[y][xx]) continue;
-          const raw = bit < dataBits.length ? dataBits[bit++] : 0;
-          const masked = raw ^ (((xx + y) % 2) === 0 ? 1 : 0);
-          m[y][xx] = !!masked;
-        }
-      }
-      upward = !upward;
-    }
-    addFormatBits(set,size);
-    let rects='';
-    const quiet = 4;
-    for(let y=0;y<size;y++) for(let x=0;x<size;x++) if(m[y][x]) rects += `<rect x="${x+quiet}" y="${y+quiet}" width="1" height="1"/>`;
-    const total=size+quiet*2;
+    addFinder(set,0,0); addFinder(set,size-7,0); addFinder(set,0,size-7); for(let i=8;i<size-8;i++){ set(i,6,i%2===0); set(6,i,i%2===0); } addAlignment(set,22,22); set(8,21,true); reserveFormat(reserve,size);
+    const dataBits=[]; allCodewords.forEach(cw=>pushBits(dataBits,cw,8)); let bit=0, upward=true;
+    for(let x=size-1; x>0; x-=2){ if(x===6) x--; for(let yi=0; yi<size; yi++){ const y = upward ? size-1-yi : yi; for(let dx=0; dx<2; dx++){ const xx = x-dx; if(reserved[y][xx]) continue; const raw = bit < dataBits.length ? dataBits[bit++] : 0; const masked = raw ^ (((xx + y) % 2) === 0 ? 1 : 0); m[y][xx] = !!masked; }} upward = !upward; }
+    addFormatBits(set,size); let rects=''; const quiet = 4; for(let y=0;y<size;y++) for(let x=0;x<size;x++) if(m[y][x]) rects += `<rect x="${x+quiet}" y="${y+quiet}" width="1" height="1"/>`; const total=size+quiet*2;
     return `<svg viewBox="0 0 ${total} ${total}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Código QR"><rect width="${total}" height="${total}" fill="#fff"/><g fill="#163f25">${rects}</g></svg>`;
   }
 
   function pushBits(arr,val,len){ for(let i=len-1;i>=0;i--) arr.push((val>>>i)&1); }
-  function addFinder(set,x,y){
-    for(let dy=-1; dy<=7; dy++) for(let dx=-1; dx<=7; dx++){
-      const xx=x+dx, yy=y+dy;
-      const in7 = dx>=0 && dx<=6 && dy>=0 && dy<=6;
-      const dark = in7 && (dx===0||dx===6||dy===0||dy===6||(dx>=2&&dx<=4&&dy>=2&&dy<=4));
-      set(xx,yy,dark,true);
-    }
-  }
-  function addAlignment(set,cx,cy){
-    for(let dy=-2; dy<=2; dy++) for(let dx=-2; dx<=2; dx++){
-      const dark = Math.max(Math.abs(dx),Math.abs(dy))===2 || (dx===0 && dy===0);
-      set(cx+dx,cy+dy,dark,true);
-    }
-  }
-  function reserveFormat(reserve,size){
-    for(let i=0;i<=8;i++){ if(i!==6){ reserve(8,i); reserve(i,8); } }
-    for(let i=0;i<8;i++) reserve(size-1-i,8);
-    for(let i=8;i<15;i++) reserve(8,size-15+i);
-  }
-  function addFormatBits(set,size){
-    const bits='111011111000100';
-    const b=i=>bits[i]==='1';
-    for(let i=0;i<=5;i++) set(8,i,b(i),true);
-    set(8,7,b(6),true); set(8,8,b(7),true); set(7,8,b(8),true);
-    for(let i=9;i<15;i++) set(14-i,8,b(i),true);
-    for(let i=0;i<8;i++) set(size-1-i,8,b(i),true);
-    for(let i=8;i<15;i++) set(8,size-15+i,b(i),true);
-  }
-  function reedSolomon(data, degree){
-    const gen=[1];
-    for(let i=0;i<degree;i++){
-      gen.push(0);
-      for(let j=gen.length-1;j>0;j--) gen[j]=gen[j-1]^gfMul(gen[j],gfPow(i));
-      gen[0]=gfMul(gen[0],gfPow(i));
-    }
-    const res=Array(degree).fill(0);
-    for(const b of data){
-      const factor = b ^ res.shift();
-      res.push(0);
-      for(let i=0;i<degree;i++) res[i] ^= gfMul(gen[i+1], factor);
-    }
-    return res;
-  }
+  function addFinder(set,x,y){ for(let dy=-1; dy<=7; dy++) for(let dx=-1; dx<=7; dx++){ const xx=x+dx, yy=y+dy; const in7 = dx>=0 && dx<=6 && dy>=0 && dy<=6; const dark = in7 && (dx===0||dx===6||dy===0||dy===6||(dx>=2&&dx<=4&&dy>=2&&dy<=4)); set(xx,yy,dark,true); } }
+  function addAlignment(set,cx,cy){ for(let dy=-2; dy<=2; dy++) for(let dx=-2; dx<=2; dx++){ const dark = Math.max(Math.abs(dx),Math.abs(dy))===2 || (dx===0 && dy===0); set(cx+dx,cy+dy,dark,true); } }
+  function reserveFormat(reserve,size){ for(let i=0;i<=8;i++){ if(i!==6){ reserve(8,i); reserve(i,8); } } for(let i=0;i<8;i++) reserve(size-1-i,8); for(let i=8;i<15;i++) reserve(8,size-15+i); }
+  function addFormatBits(set,size){ const bits='111011111000100'; const b=i=>bits[i]==='1'; for(let i=0;i<=5;i++) set(8,i,b(i),true); set(8,7,b(6),true); set(8,8,b(7),true); set(7,8,b(8),true); for(let i=9;i<15;i++) set(14-i,8,b(i),true); for(let i=0;i<8;i++) set(size-1-i,8,b(i),true); for(let i=8;i<15;i++) set(8,size-15+i,b(i),true); }
+  function reedSolomon(data, degree){ const gen=[1]; for(let i=0;i<degree;i++){ gen.push(0); for(let j=gen.length-1;j>0;j--) gen[j]=gen[j-1]^gfMul(gen[j],gfPow(i)); gen[0]=gfMul(gen[0],gfPow(i)); } const res=Array(degree).fill(0); for(const b of data){ const factor = b ^ res.shift(); res.push(0); for(let i=0;i<degree;i++) res[i] ^= gfMul(gen[i+1], factor); } return res; }
   function gfPow(i){ let x=1; for(let n=0;n<i;n++) x=gfMul(x,2); return x; }
-  function gfMul(x,y){
-    let r=0;
-    while(y){ if(y&1) r^=x; x<<=1; if(x&0x100) x^=0x11d; y>>=1; }
-    return r;
-  }
+  function gfMul(x,y){ let r=0; while(y){ if(y&1) r^=x; x<<=1; if(x&0x100) x^=0x11d; y>>=1; } return r; }
 })();
