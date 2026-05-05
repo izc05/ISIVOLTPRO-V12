@@ -1,7 +1,7 @@
-const CACHE_NAME = 'santa-teresa-local-secure-v30-glass-polish';
+const CACHE_NAME = 'santa-teresa-local-secure-v31-nav-premium';
 const APP_SHELL = [
   './',
-  './index.html?v=v30-glass-polish',
+  './index.html?v=v31-nav-premium',
   './styles.css?v=v29-visual-legal',
   './extras.css?v=v29-visual-legal',
   './guided-form.css?v=v29-visual-legal',
@@ -9,13 +9,13 @@ const APP_SHELL = [
   './app-flow.css?v=v29-visual-legal',
   './db-cards.css?v=v29-visual-legal',
   './settings-simple.css?v=v29-visual-legal',
-  './iphone-glass.css?v=v30-glass-polish',
-  './app.js?v=v30-glass-polish',
-  './qr-tools.js?v=v30-glass-polish',
-  './guided-form.js?v=v30-glass-polish',
-  './db-enhance.js?v=v30-glass-polish',
-  './settings-enhance.js?v=v30-glass-polish',
-  './report-workflow.js?v=v30-glass-polish',
+  './iphone-glass.css?v=v31-nav-premium',
+  './app.js?v=v31-nav-premium',
+  './qr-tools.js?v=v31-nav-premium',
+  './guided-form.js?v=v31-nav-premium',
+  './db-enhance.js?v=v31-nav-premium',
+  './settings-enhance.js?v=v31-nav-premium',
+  './report-workflow.js?v=v31-nav-premium',
   './manifest.webmanifest',
   './assets/app-icon.svg',
   './assets/diputacion-jaen-logo.svg',
@@ -44,6 +44,6 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v30-glass-polish') || caches.match('./index.html')))
+      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v31-nav-premium') || caches.match('./index.html')))
   );
 });
