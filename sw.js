@@ -1,17 +1,25 @@
-const CACHE_NAME = 'santa-teresa-local-secure-v16-logo-balance';
+const CACHE_NAME = 'santa-teresa-local-secure-v25-video-auth';
 const APP_SHELL = [
   './',
-  './index.html?v=v16-logo-balance',
+  './index.html?v=v25-video-auth',
   './styles.css',
   './extras.css',
+  './guided-form.css',
+  './auth-cover.css',
+  './app-flow.css',
+  './db-cards.css',
+  './settings-simple.css',
   './app.js',
   './qr-tools.js',
   './guided-form.js',
+  './db-enhance.js',
   './settings-enhance.js',
+  './report-workflow.js',
   './manifest.webmanifest',
   './assets/app-icon.svg',
   './assets/diputacion-jaen-logo.svg',
-  './assets/residencia-santa-teresa-fachada.svg'
+  './assets/residencia-santa-teresa-fachada.svg',
+  './assets/intro-santa-teresa.mp4'
 ];
 
 self.addEventListener('install', event => {
@@ -35,6 +43,6 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v16-logo-balance') || caches.match('./index.html')))
+      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v25-video-auth') || caches.match('./index.html')))
   );
 });

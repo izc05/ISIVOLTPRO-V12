@@ -1,0 +1,256 @@
+/* Simplified app workflow */
+.screen-user .module-home,
+.screen-user .editor,
+.screen-user .print-sheet{
+  display:none!important;
+}
+
+.screen-user .module-title{
+  display:block;
+}
+
+.residence-cover-video{
+  object-fit:cover;
+  object-position:center center;
+  background:#e9f6e9 url('assets/residencia-santa-teresa-fachada.svg') center/cover no-repeat;
+}
+
+.screen-user{
+  grid-template-columns:minmax(0,1fr)!important;
+}
+
+.screen-user .sidebar{
+  position:relative;
+  top:0;
+  max-height:none;
+  width:min(880px,100%);
+  margin:0 auto;
+}
+
+.screen-user .search-card,
+.screen-user .list-title,
+.screen-user .resident-list,
+.screen-user .secure-panel,
+.screen-user .toolbar,
+.screen-user #dbFilterBar{
+  display:none!important;
+}
+
+.screen-form .editor{
+  display:block!important;
+}
+
+.report-user-selector{
+  margin-bottom:14px;
+  padding:16px;
+  border-radius:24px;
+  background:#fff;
+  border:1px solid rgba(184,219,183,.82);
+  box-shadow:0 10px 24px rgba(48,39,30,.07);
+}
+
+.report-selector-head{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+}
+
+.report-selector-head h3{
+  margin:0 0 3px;
+  color:#164f25;
+  font-size:clamp(22px,3.2vw,30px);
+  line-height:1.05;
+}
+
+.report-selector-head p{
+  margin:0;
+  color:#665d56;
+  line-height:1.45;
+  font-size:14px;
+}
+
+.report-selector-search{
+  margin-top:10px;
+}
+
+.report-user-list{
+  display:grid;
+  gap:8px;
+  margin-top:10px;
+}
+
+.report-user-card,
+.report-empty{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:10px 12px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid #d8ead5;
+  box-shadow:none;
+}
+
+.report-user-card strong,
+.report-empty strong{
+  display:block;
+  color:#164f25;
+}
+
+.report-user-card span,
+.report-empty span{
+  display:block;
+  margin-top:3px;
+  color:#665d56;
+  font-size:13px;
+}
+
+.report-user-card button,
+.report-empty button{
+  min-height:40px;
+  border-radius:14px;
+  padding:8px 14px;
+  background:linear-gradient(135deg,var(--green),var(--green-dark));
+  color:#fff;
+  font-size:13px;
+}
+
+.report-user-card.selected{
+  border-color:#78b56f;
+  box-shadow:0 0 0 4px rgba(47,125,59,.14),0 8px 18px rgba(48,39,30,.06);
+}
+
+.report-user-selector.has-selection{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+  padding:12px 14px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#e9f6e9,#fff);
+}
+
+.report-user-selector.has-selection .report-selector-head{
+  display:block;
+}
+
+.report-user-selector.has-selection .report-selector-head h3{
+  margin:0;
+  font-size:18px;
+}
+
+.report-user-selector.has-selection .report-selector-head h3::after{
+  content:": " attr(data-user-name);
+}
+
+.report-user-selector.has-selection .report-selector-head .eyebrow,
+.report-user-selector.has-selection .report-selector-head p,
+.report-user-selector.has-selection .report-selector-search,
+.report-user-selector.has-selection .report-user-list{
+  display:none!important;
+}
+
+.report-user-selector.has-selection::after{
+  content:"Cambiar usuario";
+  display:inline-grid;
+  place-items:center;
+  min-height:38px;
+  padding:0 14px;
+  border:1px solid #cce7c9;
+  border-radius:14px;
+  background:#fff;
+  color:#164f25;
+  font-weight:950;
+  font-size:13px;
+}
+
+.screen-form .editor-head{
+  margin-top:2px;
+  padding:12px 14px;
+  border:1px solid #d8ead5;
+  border-radius:22px;
+  background:#fff;
+}
+
+.screen-form .editor-head .eyebrow{
+  color:#164f25;
+}
+
+.screen-form .editor-head h2{
+  font-size:clamp(22px,3vw,30px);
+}
+
+.screen-form #appStatus{
+  margin:10px 0;
+}
+
+.screen-form .guided-hero{
+  display:none!important;
+}
+
+.screen-form .quick-actions{
+  display:none!important;
+}
+
+.screen-form .wizard-card{
+  margin-top:12px!important;
+  padding:12px!important;
+}
+
+.screen-form .progress-head{
+  font-size:14px;
+}
+
+.screen-form .step-pills{
+  display:none;
+}
+
+.screen-form .wizard-actions{
+  padding:10px!important;
+  border-radius:18px!important;
+}
+
+.people-registry .people-picker{
+  margin-top:12px;
+}
+
+.screen-user .people-picker{
+  display:none;
+}
+
+.screen-db .quick-person-form{
+  display:none;
+}
+
+.screen-db .people-hero p{
+  max-width:720px;
+}
+
+.screen-db .people-picker{
+  margin-top:14px;
+}
+
+.screen-db .people-picker summary{
+  font-size:18px;
+}
+
+@media(max-width:620px){
+  .report-selector-head,
+  .report-user-card,
+  .report-empty,
+  .report-user-selector.has-selection{
+    grid-template-columns:1fr;
+  }
+
+  .report-selector-head button,
+  .report-user-card button,
+  .report-empty button{
+    width:100%;
+  }
+
+  .screen-user .sidebar{
+    width:100%;
+  }
+}

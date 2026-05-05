@@ -57,6 +57,13 @@
     li.dataset.enhanced = '1';
     li.dataset.estado = ficha.estado || 'Activa';
     const btn = li.querySelector('button');
+    let shell = li.querySelector('.resident-card-shell');
+    if(!shell){
+      shell = document.createElement('article');
+      shell.className = 'resident-card-shell';
+      if(btn) li.insertBefore(shell, btn);
+      if(btn) shell.appendChild(btn);
+    }
     if(btn){
       btn.classList.add('resident-card-main');
       const badge = document.createElement('em');
@@ -79,7 +86,7 @@
       event.stopPropagation();
       openAction(id, action);
     });
-    li.appendChild(actions);
+    shell.appendChild(actions);
   }
 
   function openAction(id, action){

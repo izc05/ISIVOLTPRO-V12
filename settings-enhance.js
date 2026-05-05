@@ -2,7 +2,7 @@
   'use strict';
 
   const $ = id => document.getElementById(id);
-  const PEOPLE_VERSION = '3.5.0-logo-balance';
+  const PEOPLE_VERSION = window.SANTA_TERESA_APP_VERSION || '3.14.0-video-auth';
 
   function ready(fn){ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
 
@@ -89,7 +89,7 @@
       if(window.setSantaScreen) window.setSantaScreen('db');
       refreshPeopleStats();
       refreshPeoplePicker();
-      setTimeout(() => { if(confirm(`Persona creada: ${person.nombre}${person.habitacion ? ' · Hab. ' + person.habitacion : ''}.\n\n¿Imprimir QR ahora?`)){ const btn = $('previewQrBtn') || $('qrFichaBtn'); if(btn) btn.click(); } }, 250);
+      setTimeout(() => { const btn = $('previewQrBtn') || $('qrFichaBtn'); if(btn) btn.click(); }, 250);
     }catch(err){ console.error(err); alert('No se ha podido crear la persona.'); }
   }
 

@@ -17,14 +17,15 @@
   function setScreen(screen){
     const app = $('appView');
     if(!app) return;
-    app.classList.remove('screen-home','screen-form','screen-db','screen-settings','screen-preview','preview-mode');
+    app.classList.remove('screen-home','screen-user','screen-form','screen-db','screen-settings','screen-preview','preview-mode');
     app.classList.add('screen-' + screen);
     if(screen === 'preview') app.classList.add('preview-mode');
 
     const titles = {
       home:['Menú principal','Usa la barra inferior para moverte por la app.'],
-      form:['Rellenar ficha','Completa la ficha paso a paso y guarda los cambios.'],
-      db:['Base de datos','Busca, abre o modifica fichas guardadas.'],
+      user:['Crear usuario','Registra sus datos basicos y opcionalmente imprime su QR.'],
+      form:['Crear informe','Selecciona un usuario por nombre o QR y completa el informe guiado.'],
+      db:['Base de datos usuarios','Consulta, edita o imprime los usuarios guardados.'],
       settings:['Configuración','Copias cifradas, contraseña y seguridad local.'],
       preview:['Vista final','Ficha con el formato visual de impresión.']
     };
@@ -37,9 +38,10 @@
   window.setSantaScreen = setScreen;
 
   function wireNavigation(){
-    const navHome = $('navHomeBtn'), navFill = $('navFillBtn'), navDb = $('navDbBtn'), navSettings = $('navSettingsBtn'), navQr = $('navQrBtn');
+    const navHome = $('navHomeBtn'), navUser = $('navUserBtn'), navFill = $('navFillBtn'), navDb = $('navDbBtn'), navSettings = $('navSettingsBtn'), navQr = $('navQrBtn');
     if(navHome) navHome.onclick = () => setScreen('home');
-    if(navFill) navFill.onclick = () => { if(!currentFicha() && typeof clearForm === 'function') clearForm(); setScreen('form'); };
+    if(navUser) navUser.onclick = () => { setScreen('user'); setTimeout(() => { window.refreshReportWorkflow?.(); $('personName')?.focus(); }, 120); };
+    if(navFill) navFill.onclick = () => { setScreen('form'); window.refreshReportWorkflow?.(); };
     if(navDb) navDb.onclick = () => setScreen('db');
     if(navSettings) navSettings.onclick = () => setScreen('settings');
     if(navQr) navQr.onclick = openScanner;
@@ -238,6 +240,7 @@
       if(manual) openByQrCode(manual.trim());
     }
   }
+  window.openSantaQrScanner = openScanner;
 
   function openByQrCode(value){
     const id = parseQrId(value);
@@ -250,6 +253,7 @@
     setScreen('preview');
     if(typeof status === 'function') status('appStatus', 'Ficha abierta desde QR.', 'ok');
   }
+  window.openSantaByQrCode = openByQrCode;
 
   function parseQrId(value){
     if(!value) return '';
