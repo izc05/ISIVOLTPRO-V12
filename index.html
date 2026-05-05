@@ -11,13 +11,13 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Residencia Santa Teresa · Base local segura</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=v28-report-search-qr">
-  <link rel="stylesheet" href="extras.css?v=v28-report-search-qr">
-  <link rel="stylesheet" href="guided-form.css?v=v28-report-search-qr">
-  <link rel="stylesheet" href="auth-cover.css?v=v28-report-search-qr">
-  <link rel="stylesheet" href="app-flow.css?v=v28-report-search-qr">
-  <link rel="stylesheet" href="db-cards.css?v=v28-report-search-qr">
-  <link rel="stylesheet" href="settings-simple.css?v=v28-report-search-qr">
+  <link rel="stylesheet" href="styles.css?v=v29-visual-legal">
+  <link rel="stylesheet" href="extras.css?v=v29-visual-legal">
+  <link rel="stylesheet" href="guided-form.css?v=v29-visual-legal">
+  <link rel="stylesheet" href="auth-cover.css?v=v29-visual-legal">
+  <link rel="stylesheet" href="app-flow.css?v=v29-visual-legal">
+  <link rel="stylesheet" href="db-cards.css?v=v29-visual-legal">
+  <link rel="stylesheet" href="settings-simple.css?v=v29-visual-legal">
 </head>
 <body>
   <main class="shell">
@@ -152,7 +152,7 @@
           <div><p class="eyebrow">Ficha guiada</p><h2 id="currentFichaLabel">Nueva ficha</h2></div>
           <div class="editor-actions">
             <button id="previewFichaBtn" class="secondary">Ver resultado</button>
-            <button id="printFichaBtn" class="secondary">Imprimir / PDF</button>
+            <button id="printFichaBtn" class="secondary">Descargar PDF</button>
             <button id="deleteFichaBtn" class="danger" disabled>Borrar</button>
             <button id="saveFichaBtn" class="primary">Guardar cifrada</button>
           </div>
@@ -188,6 +188,7 @@
           <section class="form-section photo-card" data-step="0">
             <h3>Foto opcional</h3>
             <div class="photo-box"><img id="photoPreview" alt="Foto de la persona" hidden><span id="photoEmpty">Sin foto</span></div>
+            <button id="choosePhotoBtn" class="primary" type="button">Añadir foto</button>
             <input id="photoInput" type="file" accept="image/*">
             <button id="removePhotoBtn" class="secondary" type="button">Quitar foto</button>
             <p class="muted">La app reduce la foto si pesa mucho. La imagen queda cifrada dentro de la base local.</p>
@@ -215,7 +216,7 @@
       </section>
 
       <article id="printSheet" class="print-sheet" aria-label="Vista imprimible">
-        <div class="preview-toolbar no-print"><div><strong>Vista final de la ficha</strong><p class="muted">Este es el formato que se imprimirá. Se mantienen colores y bloques.</p></div><div class="preview-actions"><button id="backToFormBtn" class="secondary" type="button">Volver a editar</button><button id="previewSaveBtn" class="primary" type="button">Guardar cifrada</button><button id="previewPrintBtn" class="secondary" type="button">Imprimir / PDF</button></div></div>
+        <div class="preview-toolbar no-print"><div><strong>Vista final de la ficha</strong><p class="muted">Este es el formato que se imprimirá. Elige "Guardar como PDF" en la ventana del navegador.</p></div><div class="preview-actions"><button id="backToFormBtn" class="secondary" type="button">Volver a editar</button><button id="previewSaveBtn" class="primary" type="button">Guardar cifrada</button><button id="previewPrintBtn" class="secondary" type="button">Descargar PDF</button></div></div>
         <header class="print-header"><img src="assets/diputacion-jaen-logo.svg" alt=""><div><h1>Conociendo a: <span id="printTitle">Nueva ficha</span></h1><p id="printSubtitle">Ficha de cuidados personalizada</p></div></header>
         <section class="print-intro"><div class="print-photo"><img id="printPhoto" alt="" hidden><span id="printPhotoEmpty">Sin foto</span></div><div class="print-data"><p><strong>Nombre:</strong> <span id="pNombre">—</span></p><p><strong>Habitación:</strong> <span id="pHabitacion">—</span></p><p><strong>Estado:</strong> <span id="pEstado">—</span></p><p><strong>Referente:</strong> <span id="pReferente">—</span></p><p><strong>Contacto autorizado:</strong> <span id="pContacto">—</span></p></div></section>
         <section class="print-block wide"><h2>Resumen personal</h2><p id="pResumen">Sin resumen.</p></section>
@@ -226,12 +227,12 @@
     </section>
   </main>
   <nav id="bottomNav" class="bottom-nav no-print hidden" aria-label="Navegación principal"><button id="navHomeBtn" type="button" data-screen="home"><span>⌂</span><small>Inicio</small></button><button id="navUserBtn" type="button" data-screen="user"><span>＋</span><small>Usuario</small></button><button id="navFillBtn" type="button" data-screen="form"><span>✍️</span><small>Informe</small></button><button id="navDbBtn" type="button" data-screen="db"><span>📋</span><small>Base</small></button><button id="navSettingsBtn" type="button" data-screen="settings"><span>⚙️</span><small>Ajustes</small></button></nav>
-  <footer class="version">v<span id="appVersion">3.17.0-report-search-qr</span></footer>
-  <script src="app.js?v=v28-report-search-qr"></script>
-  <script src="qr-tools.js?v=v28-report-search-qr"></script>
-  <script src="guided-form.js?v=v28-report-search-qr"></script>
-  <script src="db-enhance.js?v=v28-report-search-qr"></script>
-  <script src="settings-enhance.js?v=v28-report-search-qr"></script>
-  <script src="report-workflow.js?v=v28-report-search-qr"></script>
+  <footer class="version">v<span id="appVersion">3.18.0-visual-legal</span></footer>
+  <script src="app.js?v=v29-visual-legal"></script>
+  <script src="qr-tools.js?v=v29-visual-legal"></script>
+  <script src="guided-form.js?v=v29-visual-legal"></script>
+  <script src="db-enhance.js?v=v29-visual-legal"></script>
+  <script src="settings-enhance.js?v=v29-visual-legal"></script>
+  <script src="report-workflow.js?v=v29-visual-legal"></script>
 </body>
 </html>
