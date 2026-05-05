@@ -63,18 +63,31 @@
       <p class="note">La app se bloquea automáticamente tras 10 minutos de inactividad.</p>
     </section>
 
-    <section id="appView" class="app hidden" aria-label="Gestión de fichas">
+    <section id="appView" class="app hidden screen-home" aria-label="Gestión de fichas">
       <header class="app-hero no-print">
         <div>
           <p class="eyebrow">Santa Teresa Cuidados</p>
           <h1>Fichas de cuidados con base local segura</h1>
           <p class="lead">Rellena paso a paso, revisa el resultado final y guarda cada ficha cifrada en la tablet.</p>
         </div>
-        <div class="hero-actions">
+        <div class="hero-actions legacy-actions">
           <button class="secondary installAppBtn hidden" type="button">Instalar app</button>
           <button id="heroNewFichaBtn" class="primary" type="button">Crear ficha</button>
         </div>
       </header>
+
+      <section id="homeScreen" class="module-home no-print">
+        <img class="residence-cover" src="assets/residencia-santa-teresa-fachada.svg" alt="Residencia Santa Teresa">
+        <div class="app-logo-mark" aria-hidden="true">ST</div>
+        <p class="eyebrow">Menú principal</p>
+        <h2>Residencia Santa Teresa</h2>
+        <p class="lead">Usa la barra inferior para moverte por la app. Cada apartado se abre en su propia pantalla.</p>
+      </section>
+
+      <section id="moduleTitle" class="module-title no-print">
+        <h2 id="moduleTitleText">Pantalla</h2>
+        <p id="moduleSubtitle" class="muted">Apartado de trabajo</p>
+      </section>
 
       <aside class="sidebar">
         <div class="side-head">
@@ -243,7 +256,14 @@
       </article>
     </section>
   </main>
-  <footer class="version">v<span id="appVersion">2.3.0</span></footer>
+  <nav id="bottomNav" class="bottom-nav no-print hidden" aria-label="Navegación principal">
+    <button id="navHomeBtn" type="button" data-screen="home"><span>⌂</span><small>Inicio</small></button>
+    <button id="navFillBtn" type="button" data-screen="form"><span>✍️</span><small>Rellenar</small></button>
+    <button id="navDbBtn" type="button" data-screen="db"><span>📋</span><small>Base</small></button>
+    <button id="navSettingsBtn" type="button" data-screen="settings"><span>⚙️</span><small>Ajustes</small></button>
+    <button id="navQrBtn" type="button"><span>▦</span><small>QR</small></button>
+  </nav>
+  <footer class="version">v<span id="appVersion">2.7.1</span></footer>
   <script src="app.js"></script>
   <script src="qr-tools.js"></script>
 </body>
