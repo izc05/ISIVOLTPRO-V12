@@ -2,12 +2,13 @@
   'use strict';
 
   const $ = id => document.getElementById(id);
-  const PEOPLE_VERSION = '3.3.0-people-registry';
+  const PEOPLE_VERSION = '3.4.0-home-hero';
 
   function ready(fn){ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
 
   ready(() => {
     injectPeopleStyles();
+    injectHomeHeroStyles();
     setVisibleVersion();
     buildSettingsDashboard();
     buildPeopleRegistry();
@@ -122,6 +123,20 @@
   function refreshVersion(){ const out = $('settingsVersionText'); if(out) out.textContent = $('appVersion')?.textContent || PEOPLE_VERSION; }
   function setVisibleVersion(){ const out = $('appVersion'); if(out) out.textContent = PEOPLE_VERSION; refreshVersion(); }
   function escapeHtml(str){ return String(str || '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch])); }
+
+  function injectHomeHeroStyles(){
+    if($('homeHeroFixStyles')) return;
+    const style = document.createElement('style');
+    style.id = 'homeHeroFixStyles';
+    style.textContent = `
+      .module-home{overflow:hidden!important;background:linear-gradient(180deg,#fffdf8,#ecf8ec)!important}
+      .residence-cover{height:300px!important;object-fit:cover!important;object-position:center 48%!important;filter:saturate(1.04) contrast(1.02) brightness(.98)!important;background:#e9f6e9!important}
+      .app-logo-mark{width:min(390px,82vw)!important;min-height:128px!important;margin:-66px auto 18px!important;border-radius:32px!important;background:#fff url('assets/diputacion-jaen-logo.svg?v=homefix') center/82% auto no-repeat!important;box-shadow:0 20px 44px rgba(47,125,59,.25)!important;border:8px solid #fffdf8!important;color:transparent!important;font-size:0!important}
+      .app-logo-mark::before,.app-logo-mark::after{display:none!important}.module-home .eyebrow{margin-top:6px!important}.module-home h2{margin-top:4px!important}
+      @media(max-width:620px){.residence-cover{height:300px!important;object-position:center center!important}.app-logo-mark{width:min(350px,82vw)!important;min-height:112px!important;margin-top:-58px!important;background-size:84% auto!important;border-radius:28px!important}}
+    `;
+    document.head.appendChild(style);
+  }
 
   function injectPeopleStyles(){
     if($('peopleRegistryStyles')) return;
