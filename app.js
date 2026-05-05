@@ -1,5 +1,5 @@
 'use strict';
-const APP_VERSION='3.18.0-visual-legal',DB_NAME='santa-teresa-secure-vault',STORE='kv',KDF_ITERATIONS=250000,AUTO_LOCK_MS=600000,MAX_PHOTO_BYTES=900*1024,PHOTO_MAX_SIDE=1400;window.SANTA_TERESA_APP_VERSION=APP_VERSION;
+const APP_VERSION='3.19.0-glass-polish',DB_NAME='santa-teresa-secure-vault',STORE='kv',KDF_ITERATIONS=250000,AUTO_LOCK_MS=600000,MAX_PHOTO_BYTES=900*1024,PHOTO_MAX_SIDE=1400;window.SANTA_TERESA_APP_VERSION=APP_VERSION;
 const $=id=>document.getElementById(id);
 const state={db:null,meta:null,key:null,residents:[],selectedId:null,photoDataUrl:'',photoRemoved:false,timer:null,dirty:false,step:0,deferredInstall:null};
 const fields=['nombre','habitacion','fechaNacimiento','referente','contacto','estado','resumen','bien','incomoda','claves','comunicacion','movilidad','alimentacion','sueno','alergias','alertas','observaciones'];
