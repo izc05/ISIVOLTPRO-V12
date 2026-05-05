@@ -1,7 +1,7 @@
-const CACHE_NAME = 'santa-teresa-local-secure-v12-settings-security';
+const CACHE_NAME = 'santa-teresa-local-secure-v13-people-registry';
 const APP_SHELL = [
   './',
-  './index.html?v=v12-settings-security',
+  './index.html?v=v13-people-registry',
   './styles.css',
   './extras.css',
   './app.js',
@@ -35,6 +35,6 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v12-settings-security') || caches.match('./index.html')))
+      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v13-people-registry') || caches.match('./index.html')))
   );
 });
