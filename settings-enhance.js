@@ -2,7 +2,7 @@
   'use strict';
 
   const $ = id => document.getElementById(id);
-  const PEOPLE_VERSION = '3.4.0-home-hero';
+  const PEOPLE_VERSION = '3.5.0-logo-balance';
 
   function ready(fn){ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
 
@@ -94,28 +94,8 @@
   }
 
   function clearQuickForm(){ ['personName','personRoom','personWing'].forEach(id => { const el = $(id); if(el) el.value=''; }); if($('personStatus')) $('personStatus').value = 'Activa'; }
-
-  function refreshPeopleStats(){
-    if(typeof state === 'undefined' || !state.residents) return;
-    const people = state.residents || [];
-    const rooms = new Set(people.map(p => (p.habitacion||'').trim()).filter(Boolean));
-    const wings = new Set(people.map(p => (p.ala||extractWing(p.habitacion)||'').trim()).filter(Boolean));
-    if($('peopleTotalStat')) $('peopleTotalStat').textContent = people.length;
-    if($('peopleRoomsStat')) $('peopleRoomsStat').textContent = rooms.size;
-    if($('peopleWingsStat')) $('peopleWingsStat').textContent = wings.size;
-    refreshPeoplePicker();
-  }
-
-  function refreshPeoplePicker(){
-    const out = $('peoplePickerList');
-    if(!out || typeof state === 'undefined') return;
-    const q = ($('peoplePickerSearch')?.value || '').trim().toLowerCase();
-    const people = (state.residents || []).filter(p => `${p.nombre||''} ${p.habitacion||''} ${p.ala||''} ${p.estado||''}`.toLowerCase().includes(q));
-    if(!people.length){ out.innerHTML = '<p class="muted empty-picker">No hay personas que mostrar.</p>'; return; }
-    out.innerHTML = people.map(p => `<article class="person-mini-card" data-id="${escapeHtml(p.id)}"><div><strong>${escapeHtml(p.nombre || 'Sin nombre')}</strong><span>${escapeHtml([p.habitacion ? 'Hab. ' + p.habitacion : '', p.ala || extractWing(p.habitacion), p.estado || 'Activa'].filter(Boolean).join(' · '))}</span></div><div class="person-mini-actions"><button type="button" data-action="fill">Rellenar</button><button type="button" data-action="qr">QR</button></div></article>`).join('');
-    out.querySelectorAll('button').forEach(btn => { btn.onclick = event => { event.preventDefault(); const id = btn.closest('.person-mini-card')?.dataset?.id; if(!id) return; if(btn.dataset.action === 'fill') openPersonForFill(id); if(btn.dataset.action === 'qr') openPersonQr(id); }; });
-  }
-
+  function refreshPeopleStats(){ if(typeof state === 'undefined' || !state.residents) return; const people = state.residents || []; const rooms = new Set(people.map(p => (p.habitacion||'').trim()).filter(Boolean)); const wings = new Set(people.map(p => (p.ala||extractWing(p.habitacion)||'').trim()).filter(Boolean)); if($('peopleTotalStat')) $('peopleTotalStat').textContent = people.length; if($('peopleRoomsStat')) $('peopleRoomsStat').textContent = rooms.size; if($('peopleWingsStat')) $('peopleWingsStat').textContent = wings.size; refreshPeoplePicker(); }
+  function refreshPeoplePicker(){ const out = $('peoplePickerList'); if(!out || typeof state === 'undefined') return; const q = ($('peoplePickerSearch')?.value || '').trim().toLowerCase(); const people = (state.residents || []).filter(p => `${p.nombre||''} ${p.habitacion||''} ${p.ala||''} ${p.estado||''}`.toLowerCase().includes(q)); if(!people.length){ out.innerHTML = '<p class="muted empty-picker">No hay personas que mostrar.</p>'; return; } out.innerHTML = people.map(p => `<article class="person-mini-card" data-id="${escapeHtml(p.id)}"><div><strong>${escapeHtml(p.nombre || 'Sin nombre')}</strong><span>${escapeHtml([p.habitacion ? 'Hab. ' + p.habitacion : '', p.ala || extractWing(p.habitacion), p.estado || 'Activa'].filter(Boolean).join(' · '))}</span></div><div class="person-mini-actions"><button type="button" data-action="fill">Rellenar</button><button type="button" data-action="qr">QR</button></div></article>`).join(''); out.querySelectorAll('button').forEach(btn => { btn.onclick = event => { event.preventDefault(); const id = btn.closest('.person-mini-card')?.dataset?.id; if(!id) return; if(btn.dataset.action === 'fill') openPersonForFill(id); if(btn.dataset.action === 'qr') openPersonQr(id); }; }); }
   function openPersonForFill(id){ if(typeof selectFicha === 'function') selectFicha(id, false); if(typeof setStep === 'function') setStep(1); if(window.setSantaScreen) window.setSantaScreen('form'); }
   function openPersonQr(id){ if(typeof selectFicha === 'function') selectFicha(id, false); const btn = $('previewQrBtn') || $('qrFichaBtn'); if(btn) btn.click(); }
   function hookBaseRefresh(){ const navDb = $('navDbBtn'); if(navDb) navDb.addEventListener('click', () => setTimeout(() => { refreshPeopleStats(); refreshPeoplePicker(); }, 120)); const navFill = $('navFillBtn'); if(navFill) navFill.addEventListener('click', () => setTimeout(refreshPeoplePicker, 120)); }
@@ -131,9 +111,9 @@
     style.textContent = `
       .module-home{overflow:hidden!important;background:linear-gradient(180deg,#fffdf8,#ecf8ec)!important}
       .residence-cover{height:300px!important;object-fit:cover!important;object-position:center 48%!important;filter:saturate(1.04) contrast(1.02) brightness(.98)!important;background:#e9f6e9!important}
-      .app-logo-mark{width:min(390px,82vw)!important;min-height:128px!important;margin:-66px auto 18px!important;border-radius:32px!important;background:#fff url('assets/diputacion-jaen-logo.svg?v=homefix') center/82% auto no-repeat!important;box-shadow:0 20px 44px rgba(47,125,59,.25)!important;border:8px solid #fffdf8!important;color:transparent!important;font-size:0!important}
-      .app-logo-mark::before,.app-logo-mark::after{display:none!important}.module-home .eyebrow{margin-top:6px!important}.module-home h2{margin-top:4px!important}
-      @media(max-width:620px){.residence-cover{height:300px!important;object-position:center center!important}.app-logo-mark{width:min(350px,82vw)!important;min-height:112px!important;margin-top:-58px!important;background-size:84% auto!important;border-radius:28px!important}}
+      .app-logo-mark{width:min(360px,82vw)!important;min-height:112px!important;margin:-56px auto 18px!important;border-radius:30px!important;background:#fff url('assets/diputacion-jaen-logo.svg?v=logobalance') center/74% auto no-repeat!important;box-shadow:0 18px 40px rgba(47,125,59,.22)!important;border:8px solid #fffdf8!important;color:transparent!important;font-size:0!important}
+      .app-logo-mark::before,.app-logo-mark::after{display:none!important}.module-home .eyebrow{margin-top:8px!important}.module-home h2{margin-top:4px!important}
+      @media(max-width:620px){.residence-cover{height:292px!important;object-position:center center!important}.app-logo-mark{width:min(330px,82vw)!important;min-height:104px!important;margin-top:-52px!important;background-size:73% auto!important;border-radius:28px!important}}
     `;
     document.head.appendChild(style);
   }
@@ -142,13 +122,7 @@
     if($('peopleRegistryStyles')) return;
     const style = document.createElement('style');
     style.id = 'peopleRegistryStyles';
-    style.textContent = `
-      .people-registry{display:block;margin:14px 0;padding:14px;border-radius:28px;background:linear-gradient(180deg,#fffdf8,#f2fbf1);border:1px solid #d8ead5;box-shadow:0 12px 30px rgba(48,39,30,.08)}
-      .screen-settings .people-registry{display:none!important}.people-hero{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:16px;border-radius:22px;background:linear-gradient(135deg,#e9f6e9,#e7f3fb);border:1px solid #cce7c9}.people-hero h2{margin:0 0 6px;color:#164f25}.people-hero p{margin:0;color:#665d56}.people-hero>span{width:58px;height:58px;border-radius:20px;background:#fff;display:grid;place-items:center;font-size:28px;box-shadow:0 8px 18px rgba(47,125,59,.14)}
-      .quick-person-form{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.quick-person-form label{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;color:#665d56}.quick-person-form input,.quick-person-form select{width:100%;border-radius:16px;border:1px solid #d8d0c7;padding:11px;background:#fff}.quick-person-form button{grid-column:1/-1;border-radius:18px;padding:13px;font-weight:950}
-      .people-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.people-stats-grid article{background:#fff;border:1px solid #d8ead5;border-radius:18px;padding:12px;text-align:center}.people-stats-grid strong{display:block;font-size:24px;color:#164f25}.people-stats-grid span{font-size:11px;color:#665d56;font-weight:850;text-transform:uppercase}
-      .people-picker{background:#fff;border:1px solid #d8ead5;border-radius:20px;padding:10px}.people-picker summary{font-weight:950;color:#164f25;cursor:pointer}.people-picker-body{display:grid;gap:10px;margin-top:10px}.people-picker-body input{border-radius:16px;border:1px solid #d8d0c7;padding:11px}.people-picker-list{display:grid;gap:8px}.person-mini-card{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid #eee1d7;border-radius:18px;padding:10px;background:#fffdf8}.person-mini-card strong{display:block;color:#164f25}.person-mini-card span{display:block;color:#665d56;font-size:12px;margin-top:3px}.person-mini-actions{display:flex;gap:6px}.person-mini-actions button{border:1px solid #d8ead5;background:#fff;border-radius:13px;padding:8px 9px;font-size:12px;font-weight:900;color:#315064}.person-mini-actions button:first-child{background:#e9f6e9;color:#164f25}.empty-picker{margin:0;padding:10px;border:1px dashed #d8d0c7;border-radius:14px;text-align:center}
-      @media(max-width:620px){.quick-person-form{grid-template-columns:1fr}.people-stats-grid{grid-template-columns:1fr 1fr}.person-mini-card{grid-template-columns:1fr}.person-mini-actions{display:grid;grid-template-columns:1fr 1fr}.people-hero{grid-template-columns:1fr;text-align:center}.people-hero>span{margin:0 auto}}`;
+    style.textContent = `.people-registry{display:block;margin:14px 0;padding:14px;border-radius:28px;background:linear-gradient(180deg,#fffdf8,#f2fbf1);border:1px solid #d8ead5;box-shadow:0 12px 30px rgba(48,39,30,.08)}.screen-settings .people-registry{display:none!important}.people-hero{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:16px;border-radius:22px;background:linear-gradient(135deg,#e9f6e9,#e7f3fb);border:1px solid #cce7c9}.people-hero h2{margin:0 0 6px;color:#164f25}.people-hero p{margin:0;color:#665d56}.people-hero>span{width:58px;height:58px;border-radius:20px;background:#fff;display:grid;place-items:center;font-size:28px;box-shadow:0 8px 18px rgba(47,125,59,.14)}.quick-person-form{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.quick-person-form label{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;color:#665d56}.quick-person-form input,.quick-person-form select{width:100%;border-radius:16px;border:1px solid #d8d0c7;padding:11px;background:#fff}.quick-person-form button{grid-column:1/-1;border-radius:18px;padding:13px;font-weight:950}.people-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.people-stats-grid article{background:#fff;border:1px solid #d8ead5;border-radius:18px;padding:12px;text-align:center}.people-stats-grid strong{display:block;font-size:24px;color:#164f25}.people-stats-grid span{font-size:11px;color:#665d56;font-weight:850;text-transform:uppercase}.people-picker{background:#fff;border:1px solid #d8ead5;border-radius:20px;padding:10px}.people-picker summary{font-weight:950;color:#164f25;cursor:pointer}.people-picker-body{display:grid;gap:10px;margin-top:10px}.people-picker-body input{border-radius:16px;border:1px solid #d8d0c7;padding:11px}.people-picker-list{display:grid;gap:8px}.person-mini-card{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid #eee1d7;border-radius:18px;padding:10px;background:#fffdf8}.person-mini-card strong{display:block;color:#164f25}.person-mini-card span{display:block;color:#665d56;font-size:12px;margin-top:3px}.person-mini-actions{display:flex;gap:6px}.person-mini-actions button{border:1px solid #d8ead5;background:#fff;border-radius:13px;padding:8px 9px;font-size:12px;font-weight:900;color:#315064}.person-mini-actions button:first-child{background:#e9f6e9;color:#164f25}.empty-picker{margin:0;padding:10px;border:1px dashed #d8d0c7;border-radius:14px;text-align:center}@media(max-width:620px){.quick-person-form{grid-template-columns:1fr}.people-stats-grid{grid-template-columns:1fr 1fr}.person-mini-card{grid-template-columns:1fr}.person-mini-actions{display:grid;grid-template-columns:1fr 1fr}.people-hero{grid-template-columns:1fr;text-align:center}.people-hero>span{margin:0 auto}}`;
     document.head.appendChild(style);
   }
 })();

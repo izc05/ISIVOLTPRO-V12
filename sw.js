@@ -1,7 +1,7 @@
-const CACHE_NAME = 'santa-teresa-local-secure-v15-home-hero-real';
+const CACHE_NAME = 'santa-teresa-local-secure-v16-logo-balance';
 const APP_SHELL = [
   './',
-  './index.html?v=v15-home-hero-real',
+  './index.html?v=v16-logo-balance',
   './styles.css',
   './extras.css',
   './app.js',
@@ -35,6 +35,6 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v15-home-hero-real') || caches.match('./index.html')))
+      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v16-logo-balance') || caches.match('./index.html')))
   );
 });
