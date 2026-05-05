@@ -52,7 +52,7 @@
 
 .report-selector-head{
   display:grid;
-  grid-template-columns:1fr auto;
+  grid-template-columns:1fr auto auto;
   gap:12px;
   align-items:center;
 }
@@ -118,6 +118,10 @@
   font-size:13px;
 }
 
+#reportChangeUserBtn{
+  display:none;
+}
+
 .report-user-card.selected{
   border-color:#78b56f;
   box-shadow:0 0 0 4px rgba(47,125,59,.14),0 8px 18px rgba(48,39,30,.06);
@@ -134,7 +138,8 @@
 }
 
 .report-user-selector.has-selection .report-selector-head{
-  display:block;
+  display:grid;
+  grid-template-columns:1fr auto;
 }
 
 .report-user-selector.has-selection .report-selector-head h3{
@@ -148,23 +153,14 @@
 
 .report-user-selector.has-selection .report-selector-head .eyebrow,
 .report-user-selector.has-selection .report-selector-head p,
+.report-user-selector.has-selection #reportScanQrBtn,
 .report-user-selector.has-selection .report-selector-search,
 .report-user-selector.has-selection .report-user-list{
   display:none!important;
 }
 
-.report-user-selector.has-selection::after{
-  content:"Cambiar usuario";
+.report-user-selector.has-selection #reportChangeUserBtn{
   display:inline-grid;
-  place-items:center;
-  min-height:38px;
-  padding:0 14px;
-  border:1px solid #cce7c9;
-  border-radius:14px;
-  background:#fff;
-  color:#164f25;
-  font-weight:950;
-  font-size:13px;
 }
 
 .screen-form .editor-head{

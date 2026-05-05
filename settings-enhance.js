@@ -2,7 +2,7 @@
   'use strict';
 
   const $ = id => document.getElementById(id);
-  const PEOPLE_VERSION = window.SANTA_TERESA_APP_VERSION || '3.16.0-photo-compress';
+  const PEOPLE_VERSION = window.SANTA_TERESA_APP_VERSION || '3.17.0-report-search-qr';
 
   function ready(fn){ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
 
