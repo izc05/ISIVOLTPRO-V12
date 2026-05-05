@@ -1,12 +1,13 @@
-const CACHE_NAME = 'santa-teresa-local-secure-v10-db-visual';
+const CACHE_NAME = 'santa-teresa-local-secure-v11-guided-form';
 const APP_SHELL = [
   './',
-  './index.html?v=v10-db-visual',
+  './index.html?v=v11-guided-form',
   './styles.css',
   './extras.css',
   './app.js',
   './qr-tools.js',
   './db-enhance.js',
+  './form-guide.js',
   './manifest.webmanifest',
   './assets/app-icon.svg',
   './assets/diputacion-jaen-logo.svg',
@@ -34,6 +35,6 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v10-db-visual') || caches.match('./index.html')))
+      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v11-guided-form') || caches.match('./index.html')))
   );
 });
