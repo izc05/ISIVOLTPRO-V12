@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://www.dipujaen.es; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'; upgrade-insecure-requests">
   <meta name="theme-color" content="#2f7d3b">
   <meta name="robots" content="noindex,nofollow">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -77,8 +77,8 @@
       </header>
 
       <section id="homeScreen" class="module-home no-print">
-        <img class="residence-cover" src="assets/residencia-santa-teresa-fachada.svg" alt="Residencia Santa Teresa">
-        <div class="app-logo-mark" aria-hidden="true">ST</div>
+        <img class="residence-cover" src="https://www.dipujaen.es/export/sites/default/galerias/galeriaImagenes/diputacion/dipujaen/igualdad-bienestar-social/residencias/Foto.JPG" onerror="this.onerror=null;this.src='assets/residencia-santa-teresa-fachada.svg';" alt="Residencia Santa Teresa">
+        <div class="app-logo-mark" aria-hidden="true">Diputación de Jaén</div>
         <p class="eyebrow">Menú principal</p>
         <h2>Residencia Santa Teresa</h2>
         <p class="lead">Usa la barra inferior para moverte por la app. Cada apartado se abre en su propia pantalla.</p>
@@ -98,26 +98,22 @@
           </div>
           <button id="lockBtn" class="secondary compact">Bloquear</button>
         </div>
-
         <div class="vault-stats" aria-label="Resumen de fichas">
           <article><span id="totalStat">0</span><small>Total</small></article>
           <article><span id="activeStat">0</span><small>Activas</small></article>
           <article><span id="reviewStat">0</span><small>Revisión</small></article>
           <article><span id="archivedStat">0</span><small>Archivadas</small></article>
         </div>
-
         <div class="toolbar">
           <button id="newFichaBtn" class="primary">Nueva ficha</button>
           <button id="exportBackupBtn" class="secondary">Copia cifrada</button>
         </div>
-
         <div class="search-card">
           <label for="searchBox">Buscar por nombre, habitación o estado</label>
           <input id="searchBox" placeholder="Ej. María, 104, activa">
         </div>
         <div class="list-title"><strong>Fichas</strong><span id="residentCount">0 fichas</span></div>
         <ul id="residentList" class="resident-list"></ul>
-
         <details class="secure-panel">
           <summary>Cambiar contraseña maestra</summary>
           <label for="currentPassword">Contraseña actual</label>
@@ -129,7 +125,6 @@
           <button id="changePasswordBtn" class="secondary">Recifrar con nueva contraseña</button>
           <p id="passwordStatus" class="status" hidden></p>
         </details>
-
         <details class="secure-panel danger-zone">
           <summary>Zona peligrosa</summary>
           <p class="muted">Borra completamente la base de este navegador. Antes exporta una copia cifrada si quieres conservar los datos.</p>
@@ -139,10 +134,7 @@
 
       <section class="editor">
         <div class="editor-head">
-          <div>
-            <p class="eyebrow">Ficha guiada</p>
-            <h2 id="currentFichaLabel">Nueva ficha</h2>
-          </div>
+          <div><p class="eyebrow">Ficha guiada</p><h2 id="currentFichaLabel">Nueva ficha</h2></div>
           <div class="editor-actions">
             <button id="previewFichaBtn" class="secondary">Ver resultado</button>
             <button id="printFichaBtn" class="secondary">Imprimir / PDF</button>
@@ -151,7 +143,6 @@
           </div>
         </div>
         <p id="appStatus" class="status" hidden></p>
-
         <div class="wizard-card" aria-label="Asistente de relleno">
           <div class="progress-head"><strong id="stepTitle">Paso 1 · Datos básicos</strong><span id="stepCounter">1 de 4</span></div>
           <div class="progress"><span id="progressFill"></span></div>
@@ -163,7 +154,6 @@
           </div>
           <p id="stepHelp" class="muted">Empieza por los datos mínimos. La ficha se puede completar poco a poco y guardar cuando quieras.</p>
         </div>
-
         <form class="form-grid" autocomplete="off">
           <section class="form-section span-2" data-step="0">
             <h3>Datos principales</h3>
@@ -180,7 +170,6 @@
             <label for="resumen">Resumen personal</label>
             <textarea id="resumen" placeholder="Descripción breve, preferencias importantes y contexto de cuidado."></textarea>
           </section>
-
           <section class="form-section photo-card" data-step="0">
             <h3>Foto opcional</h3>
             <div class="photo-box"><img id="photoPreview" alt="Foto de la persona" hidden><span id="photoEmpty">Sin foto</span></div>
@@ -188,14 +177,12 @@
             <button id="removePhotoBtn" class="secondary" type="button">Quitar foto</button>
             <p class="muted">Límite recomendado: 900 KB. La imagen queda cifrada dentro de la base local.</p>
           </section>
-
           <section class="form-section span-2" data-step="1">
             <h3>Bienestar y forma de tratarle</h3>
             <label for="bien">Lo que le hace sentir bien · un punto por línea</label><textarea id="bien" placeholder="Ej. Que le expliquen con antelación lo que se va a hacer"></textarea>
             <label for="incomoda">Lo que puede incomodarle · un punto por línea</label><textarea id="incomoda" placeholder="Ej. Cambios bruscos, prisas o ruidos fuertes"></textarea>
             <label for="claves">Claves para cuidarle mejor · un punto por línea</label><textarea id="claves" placeholder="Ej. Hablar despacio, validar sus preferencias, mantener su rutina"></textarea>
           </section>
-
           <section class="form-section span-2" data-step="2">
             <h3>Cuidados y observaciones</h3>
             <div class="grid-2">
@@ -209,60 +196,21 @@
             <label for="observaciones">Observaciones generales</label><textarea id="observaciones"></textarea>
           </section>
         </form>
-
-        <div class="wizard-actions no-print">
-          <button id="prevStepBtn" class="secondary" type="button">Anterior</button>
-          <button id="nextStepBtn" class="primary" type="button">Siguiente</button>
-        </div>
+        <div class="wizard-actions no-print"><button id="prevStepBtn" class="secondary" type="button">Anterior</button><button id="nextStepBtn" class="primary" type="button">Siguiente</button></div>
       </section>
 
       <article id="printSheet" class="print-sheet" aria-label="Vista imprimible">
-        <div class="preview-toolbar no-print">
-          <div><strong>Vista final de la ficha</strong><p class="muted">Este es el formato que se imprimirá. Se mantienen colores y bloques.</p></div>
-          <div class="preview-actions">
-            <button id="backToFormBtn" class="secondary" type="button">Volver a editar</button>
-            <button id="previewSaveBtn" class="primary" type="button">Guardar cifrada</button>
-            <button id="previewPrintBtn" class="secondary" type="button">Imprimir / PDF</button>
-          </div>
-        </div>
-        <header class="print-header">
-          <img src="assets/diputacion-jaen-logo.svg" alt="">
-          <div><h1>Conociendo a: <span id="printTitle">Nueva ficha</span></h1><p id="printSubtitle">Ficha de cuidados personalizada</p></div>
-        </header>
-        <section class="print-intro">
-          <div class="print-photo"><img id="printPhoto" alt="" hidden><span id="printPhotoEmpty">Sin foto</span></div>
-          <div class="print-data">
-            <p><strong>Nombre:</strong> <span id="pNombre">—</span></p>
-            <p><strong>Habitación:</strong> <span id="pHabitacion">—</span></p>
-            <p><strong>Estado:</strong> <span id="pEstado">—</span></p>
-            <p><strong>Referente:</strong> <span id="pReferente">—</span></p>
-            <p><strong>Contacto autorizado:</strong> <span id="pContacto">—</span></p>
-          </div>
-        </section>
+        <div class="preview-toolbar no-print"><div><strong>Vista final de la ficha</strong><p class="muted">Este es el formato que se imprimirá. Se mantienen colores y bloques.</p></div><div class="preview-actions"><button id="backToFormBtn" class="secondary" type="button">Volver a editar</button><button id="previewSaveBtn" class="primary" type="button">Guardar cifrada</button><button id="previewPrintBtn" class="secondary" type="button">Imprimir / PDF</button></div></div>
+        <header class="print-header"><img src="assets/diputacion-jaen-logo.svg" alt=""><div><h1>Conociendo a: <span id="printTitle">Nueva ficha</span></h1><p id="printSubtitle">Ficha de cuidados personalizada</p></div></header>
+        <section class="print-intro"><div class="print-photo"><img id="printPhoto" alt="" hidden><span id="printPhotoEmpty">Sin foto</span></div><div class="print-data"><p><strong>Nombre:</strong> <span id="pNombre">—</span></p><p><strong>Habitación:</strong> <span id="pHabitacion">—</span></p><p><strong>Estado:</strong> <span id="pEstado">—</span></p><p><strong>Referente:</strong> <span id="pReferente">—</span></p><p><strong>Contacto autorizado:</strong> <span id="pContacto">—</span></p></div></section>
         <section class="print-block wide"><h2>Resumen personal</h2><p id="pResumen">Sin resumen.</p></section>
-        <div class="print-grid">
-          <section class="print-block green"><h2>Lo que le hace sentir bien</h2><div id="pBien"></div></section>
-          <section class="print-block pink"><h2>Lo que puede incomodarle</h2><div id="pIncomoda"></div></section>
-          <section class="print-block blue"><h2>Claves para cuidarle mejor</h2><div id="pClaves"></div></section>
-          <section class="print-block"><h2>Comunicación</h2><p id="pComunicacion"></p></section>
-          <section class="print-block"><h2>Movilidad</h2><p id="pMovilidad"></p></section>
-          <section class="print-block"><h2>Alimentación</h2><p id="pAlimentacion"></p></section>
-          <section class="print-block"><h2>Sueño / descanso</h2><p id="pSueno"></p></section>
-          <section class="print-block warn"><h2>Alergias / intolerancias</h2><p id="pAlergias"></p></section>
-          <section class="print-block warn"><h2>Alertas importantes</h2><p id="pAlertas"></p></section>
-        </div>
+        <div class="print-grid"><section class="print-block green"><h2>Lo que le hace sentir bien</h2><div id="pBien"></div></section><section class="print-block pink"><h2>Lo que puede incomodarle</h2><div id="pIncomoda"></div></section><section class="print-block blue"><h2>Claves para cuidarle mejor</h2><div id="pClaves"></div></section><section class="print-block"><h2>Comunicación</h2><p id="pComunicacion"></p></section><section class="print-block"><h2>Movilidad</h2><p id="pMovilidad"></p></section><section class="print-block"><h2>Alimentación</h2><p id="pAlimentacion"></p></section><section class="print-block"><h2>Sueño / descanso</h2><p id="pSueno"></p></section><section class="print-block warn"><h2>Alergias / intolerancias</h2><p id="pAlergias"></p></section><section class="print-block warn"><h2>Alertas importantes</h2><p id="pAlertas"></p></section></div>
         <section class="print-block wide"><h2>Observaciones</h2><p id="pObservaciones"></p></section>
         <footer><span id="pUpdated">Última actualización: —</span><span>Documento generado localmente</span></footer>
       </article>
     </section>
   </main>
-  <nav id="bottomNav" class="bottom-nav no-print hidden" aria-label="Navegación principal">
-    <button id="navHomeBtn" type="button" data-screen="home"><span>⌂</span><small>Inicio</small></button>
-    <button id="navFillBtn" type="button" data-screen="form"><span>✍️</span><small>Rellenar</small></button>
-    <button id="navDbBtn" type="button" data-screen="db"><span>📋</span><small>Base</small></button>
-    <button id="navSettingsBtn" type="button" data-screen="settings"><span>⚙️</span><small>Ajustes</small></button>
-    <button id="navQrBtn" type="button"><span>▦</span><small>QR</small></button>
-  </nav>
+  <nav id="bottomNav" class="bottom-nav no-print hidden" aria-label="Navegación principal"><button id="navHomeBtn" type="button" data-screen="home"><span>⌂</span><small>Inicio</small></button><button id="navFillBtn" type="button" data-screen="form"><span>✍️</span><small>Rellenar</small></button><button id="navDbBtn" type="button" data-screen="db"><span>📋</span><small>Base</small></button><button id="navSettingsBtn" type="button" data-screen="settings"><span>⚙️</span><small>Ajustes</small></button><button id="navQrBtn" type="button"><span>▦</span><small>QR</small></button></nav>
   <footer class="version">v<span id="appVersion">2.7.1</span></footer>
   <script src="app.js"></script>
   <script src="qr-tools.js"></script>
