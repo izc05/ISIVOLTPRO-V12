@@ -1,0 +1,136 @@
+/* Basic settings screen */
+.screen-settings .app-hero,
+.screen-settings .side-head,
+.screen-settings .toolbar,
+.screen-settings #dbFilterBar,
+.screen-settings .people-registry{
+  display:none!important;
+}
+
+.screen-db .secure-panel,
+.screen-user .secure-panel,
+.screen-form .secure-panel,
+.screen-preview .secure-panel,
+.screen-home .secure-panel{
+  display:none!important;
+}
+
+.screen-settings .module-title{
+  max-width:920px;
+  margin:0 auto 14px;
+  padding:16px 18px;
+  border-radius:22px;
+  background:#fff;
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 10px 24px rgba(48,39,30,.07);
+}
+
+.screen-settings .sidebar{
+  width:min(920px,100%)!important;
+  padding:18px!important;
+  border-radius:26px!important;
+}
+
+.screen-settings .settings-dashboard{
+  display:grid!important;
+  gap:14px;
+}
+
+.screen-settings .secure-panel{
+  display:block!important;
+  margin:0!important;
+  padding:16px!important;
+  border:1px solid #d8ead5!important;
+  border-radius:20px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+
+.screen-settings .secure-panel summary{
+  color:#164f25!important;
+  font-size:20px!important;
+}
+
+.screen-settings .danger-zone{
+  border-color:#efd0cb!important;
+  background:#fffaf8!important;
+}
+
+.screen-settings .danger-zone summary{
+  color:#b3342e!important;
+}
+
+.screen-settings .settings-hero-card{
+  margin:0!important;
+  padding:18px!important;
+  border-radius:22px!important;
+  background:#fff!important;
+  color:#292725!important;
+  border:1px solid #d8ead5!important;
+  box-shadow:0 10px 24px rgba(48,39,30,.07)!important;
+}
+
+.screen-settings .settings-hero-card h2{
+  margin:0 0 4px!important;
+  color:#164f25!important;
+  font-size:26px!important;
+}
+
+.screen-settings .settings-hero-card p{
+  color:#665d56!important;
+}
+
+.screen-settings .settings-lock-icon{
+  width:56px!important;
+  height:56px!important;
+  border-radius:18px!important;
+  background:#e9f6e9!important;
+  font-size:28px!important;
+}
+
+.screen-settings .settings-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:12px!important;
+}
+
+.screen-settings .settings-card{
+  padding:16px!important;
+  border-radius:20px!important;
+  box-shadow:none!important;
+}
+
+.screen-settings .settings-card h3{
+  font-size:20px!important;
+}
+
+.screen-settings .settings-card p{
+  margin:0 0 10px!important;
+}
+
+.screen-settings .settings-card small{
+  display:block;
+  margin-top:8px;
+}
+
+.screen-settings .settings-version-card{
+  margin:0!important;
+  border-radius:18px!important;
+  background:#fff!important;
+  border-color:#d8ead5!important;
+}
+
+@media(max-width:760px){
+  .screen-settings .settings-grid{
+    grid-template-columns:1fr!important;
+  }
+
+  .screen-settings .settings-hero-card{
+    grid-template-columns:1fr!important;
+    text-align:left!important;
+  }
+
+  .screen-settings .settings-lock-icon{
+    display:none!important;
+  }
+}

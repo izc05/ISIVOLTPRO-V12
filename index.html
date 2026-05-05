@@ -13,12 +13,19 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="extras.css">
+  <link rel="stylesheet" href="guided-form.css">
+  <link rel="stylesheet" href="auth-cover.css">
+  <link rel="stylesheet" href="app-flow.css">
+  <link rel="stylesheet" href="db-cards.css">
+  <link rel="stylesheet" href="settings-simple.css">
 </head>
 <body>
   <main class="shell">
     <section id="setupView" class="auth-card hidden" aria-labelledby="setupTitle">
       <div class="auth-hero-mini">
-        <img class="brand" src="assets/diputacion-jaen-logo.svg" alt="Diputación de Jaén">
+        <video class="brand brand-video" autoplay muted loop playsinline poster="assets/diputacion-jaen-logo.svg" aria-label="Residencia Santa Teresa">
+          <source src="assets/intro-santa-teresa.mp4" type="video/mp4">
+        </video>
         <span class="secure-badge">Local · Cifrado · Tablet</span>
       </div>
       <p class="eyebrow">Primera configuración</p>
@@ -29,11 +36,14 @@
       </div>
       <label for="setupVaultName">Nombre de la base</label>
       <input id="setupVaultName" autocomplete="organization" value="Residencia Santa Teresa">
-      <label for="setupPassword">Contraseña maestra</label>
-      <input id="setupPassword" type="password" autocomplete="new-password" minlength="10" placeholder="Mínimo 10 caracteres">
-      <label for="setupPassword2">Repetir contraseña maestra</label>
-      <input id="setupPassword2" type="password" autocomplete="new-password" minlength="10">
-      <label class="checkline"><input id="setupAccept" type="checkbox"> Entiendo que sin esta contraseña no se podrá recuperar la base y que debo hacer copias cifradas periódicas.</label>
+      <div class="auth-secret-panel">
+        <p class="auth-panel-title">Acceso privado</p>
+        <label for="setupPassword">Contraseña maestra</label>
+        <input id="setupPassword" type="password" autocomplete="new-password" minlength="10" placeholder="Mínimo 10 caracteres">
+        <label for="setupPassword2">Repetir contraseña maestra</label>
+        <input id="setupPassword2" type="password" autocomplete="new-password" minlength="10">
+        <label class="checkline"><input id="setupAccept" type="checkbox"> Entiendo que sin esta contraseña no se podrá recuperar la base y que debo hacer copias cifradas periódicas.</label>
+      </div>
       <button id="createVaultBtn" class="primary big-action">Crear base local</button>
       <button class="secondary installAppBtn hidden" type="button">Instalar en este dispositivo</button>
       <p id="setupStatus" class="status" hidden></p>
@@ -42,7 +52,9 @@
 
     <section id="unlockView" class="auth-card hidden" aria-labelledby="unlockTitle">
       <div class="auth-hero-mini">
-        <img class="brand" src="assets/diputacion-jaen-logo.svg" alt="Diputación de Jaén">
+        <video class="brand brand-video" autoplay muted loop playsinline poster="assets/diputacion-jaen-logo.svg" aria-label="Residencia Santa Teresa">
+          <source src="assets/intro-santa-teresa.mp4" type="video/mp4">
+        </video>
         <span class="secure-badge">Acceso privado</span>
       </div>
       <p class="eyebrow">Base local cifrada</p>
@@ -51,8 +63,11 @@
       <div class="trust-strip" aria-label="Características de seguridad">
         <span>🔒 Contraseña maestra</span><span>⏱️ Bloqueo automático</span><span>💾 Copia cifrada</span>
       </div>
-      <label for="unlockPassword">Contraseña maestra</label>
-      <input id="unlockPassword" type="password" autocomplete="current-password">
+      <div class="auth-secret-panel compact-secret">
+        <p class="auth-panel-title">Desbloqueo seguro</p>
+        <label for="unlockPassword">Contraseña maestra</label>
+        <input id="unlockPassword" type="password" autocomplete="current-password">
+      </div>
       <button id="unlockBtn" class="primary big-action">Desbloquear</button>
       <div class="actions one">
         <button id="importBackupBtn" class="secondary">Importar copia cifrada</button>
@@ -210,11 +225,13 @@
       </article>
     </section>
   </main>
-  <nav id="bottomNav" class="bottom-nav no-print hidden" aria-label="Navegación principal"><button id="navHomeBtn" type="button" data-screen="home"><span>⌂</span><small>Inicio</small></button><button id="navFillBtn" type="button" data-screen="form"><span>✍️</span><small>Rellenar</small></button><button id="navDbBtn" type="button" data-screen="db"><span>📋</span><small>Base</small></button><button id="navSettingsBtn" type="button" data-screen="settings"><span>⚙️</span><small>Ajustes</small></button><button id="navQrBtn" type="button"><span>▦</span><small>QR</small></button></nav>
-  <footer class="version">v<span id="appVersion">2.7.1</span></footer>
+  <nav id="bottomNav" class="bottom-nav no-print hidden" aria-label="Navegación principal"><button id="navHomeBtn" type="button" data-screen="home"><span>⌂</span><small>Inicio</small></button><button id="navUserBtn" type="button" data-screen="user"><span>＋</span><small>Usuario</small></button><button id="navFillBtn" type="button" data-screen="form"><span>✍️</span><small>Informe</small></button><button id="navDbBtn" type="button" data-screen="db"><span>📋</span><small>Base</small></button><button id="navSettingsBtn" type="button" data-screen="settings"><span>⚙️</span><small>Ajustes</small></button></nav>
+  <footer class="version">v<span id="appVersion">3.14.0-video-auth</span></footer>
   <script src="app.js"></script>
   <script src="qr-tools.js"></script>
   <script src="guided-form.js"></script>
+  <script src="db-enhance.js"></script>
   <script src="settings-enhance.js"></script>
+  <script src="report-workflow.js"></script>
 </body>
 </html>

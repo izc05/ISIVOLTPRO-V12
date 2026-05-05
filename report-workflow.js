@@ -1,0 +1,148 @@
+(() => {
+  'use strict';
+
+  const $ = id => document.getElementById(id);
+
+  function ready(fn){
+    document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn();
+  }
+
+  ready(() => {
+    buildReportSelector();
+    retitleUserRegistry();
+    hookRefresh();
+    setInterval(() => {
+      refreshReportSelector();
+      retitleUserRegistry();
+    }, 1200);
+  });
+
+  function buildReportSelector(){
+    const editor = document.querySelector('.editor');
+    if(!editor || $('reportUserSelector')) return;
+
+    const panel = document.createElement('section');
+    panel.id = 'reportUserSelector';
+    panel.className = 'report-user-selector no-print';
+    panel.innerHTML = `
+      <div class="report-selector-head">
+        <div>
+          <p class="eyebrow">Crear informe</p>
+          <h3>Selecciona un usuario</h3>
+          <p>Busca por nombre, habitacion o zona. Tambien puedes escanear su QR.</p>
+        </div>
+        <button id="reportScanQrBtn" type="button" class="secondary">Escanear QR</button>
+      </div>
+      <div class="report-selector-search">
+        <label for="reportUserSearch">Usuario</label>
+        <input id="reportUserSearch" placeholder="Buscar usuario para el informe">
+      </div>
+      <div id="reportUserList" class="report-user-list"></div>
+    `;
+
+    editor.insertBefore(panel, editor.firstChild);
+    $('reportUserSearch').addEventListener('input', refreshReportSelector);
+    $('reportScanQrBtn').onclick = () => {
+      if(typeof window.openSantaQrScanner === 'function') window.openSantaQrScanner();
+      else $('navDbBtn')?.click();
+    };
+    refreshReportSelector();
+  }
+
+  function hookRefresh(){
+    ['navFillBtn','navUserBtn','navDbBtn'].forEach(id => {
+      const btn = $(id);
+      if(btn) btn.addEventListener('click', () => setTimeout(() => {
+        refreshReportSelector();
+        retitleUserRegistry();
+      }, 140));
+    });
+  }
+
+  function refreshReportSelector(){
+    const list = $('reportUserList');
+    if(!list || typeof state === 'undefined') return;
+
+    const q = ($('reportUserSearch')?.value || '').trim().toLowerCase();
+    const people = (state.residents || []).filter(person => `${person.nombre || ''} ${person.habitacion || ''} ${person.ala || ''} ${person.estado || ''}`.toLowerCase().includes(q));
+
+    if(!people.length){
+      list.innerHTML = `
+        <article class="report-empty">
+          <strong>No hay usuarios que mostrar</strong>
+          <span>Crea primero un usuario con sus datos basicos.</span>
+          <button type="button" id="reportCreateUserBtn">Crear usuario</button>
+        </article>
+      `;
+      const create = $('reportCreateUserBtn');
+      if(create) create.onclick = () => {
+        if(window.setSantaScreen) window.setSantaScreen('user');
+        setTimeout(() => $('personName')?.focus(), 120);
+      };
+      return;
+    }
+
+    list.innerHTML = people.map(person => `
+      <article class="report-user-card" data-id="${escapeHtml(person.id)}">
+        <div>
+          <strong>${escapeHtml(person.nombre || 'Sin nombre')}</strong>
+          <span>${escapeHtml([person.habitacion ? 'Hab. ' + person.habitacion : '', person.ala || '', person.estado || 'Activa'].filter(Boolean).join(' - '))}</span>
+        </div>
+        <button type="button">Crear informe</button>
+      </article>
+    `).join('');
+
+    list.querySelectorAll('.report-user-card button').forEach(button => {
+      button.onclick = () => {
+        const id = button.closest('.report-user-card')?.dataset?.id;
+        if(!id) return;
+        if(typeof selectFicha === 'function') selectFicha(id, false);
+        if(typeof setStep === 'function') setStep(0);
+        refreshSelectedUserState();
+        document.querySelector('.guided-hero')?.scrollIntoView({behavior:'smooth', block:'start'});
+      };
+    });
+
+    refreshSelectedUserState();
+  }
+
+  function refreshSelectedUserState(){
+    if(typeof state === 'undefined') return;
+    const panel = $('reportUserSelector');
+    const selected = (state.residents || []).find(person => person.id === state.selectedId);
+    if(panel){
+      panel.classList.toggle('has-selection', !!selected);
+      panel.dataset.selectedName = selected?.nombre || '';
+      panel.querySelector('.report-selector-head h3')?.setAttribute('data-user-name', selected?.nombre || '');
+    }
+    document.querySelectorAll('.report-user-card').forEach(card => {
+      card.classList.toggle('selected', card.dataset.id === state.selectedId);
+    });
+  }
+
+  function retitleUserRegistry(){
+    const panel = $('peopleRegistryPanel');
+    if(!panel) return;
+    const eyebrow = panel.querySelector('.people-hero .eyebrow');
+    const title = panel.querySelector('.people-hero h2');
+    const copy = panel.querySelector('.people-hero p:not(.eyebrow)');
+    const submit = $('quickPersonForm')?.querySelector('button[type="submit"]');
+    const summary = panel.querySelector('.people-picker summary');
+    const total = $('peopleTotalStat')?.nextElementSibling;
+    const fillButtons = panel.querySelectorAll('[data-action="fill"]');
+
+    if(eyebrow) eyebrow.textContent = 'Usuarios';
+    if(title) title.textContent = 'Crear usuario';
+    if(copy) copy.textContent = 'Guarda sus datos basicos: nombre, habitacion, zona y estado. Despues podras crear informes desde su nombre o QR.';
+    if(submit) submit.textContent = 'Crear usuario y QR';
+    if(summary) summary.textContent = 'Base de datos usuarios';
+    if(total) total.textContent = 'Usuarios';
+    fillButtons.forEach(btn => btn.textContent = 'Informe');
+  }
+
+  function escapeHtml(value){
+    return String(value || '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+  }
+
+  window.refreshReportWorkflow = refreshReportSelector;
+})();

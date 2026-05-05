@@ -1,0 +1,204 @@
+/* Auth cover polish */
+body:has(.auth-card:not(.hidden)){
+  background:linear-gradient(135deg,#f7f2ea 0%,#fffdf8 46%,#edf6ee 100%);
+}
+
+body:has(.auth-card:not(.hidden))::before{
+  background:linear-gradient(115deg,rgba(255,255,255,.72),transparent 42%,rgba(255,255,255,.34));
+  mix-blend-mode:normal;
+}
+
+.auth-card{
+  width:min(590px,calc(100vw - 32px))!important;
+  margin:5.5vh auto!important;
+  padding:36px 38px 34px!important;
+  border-radius:30px!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,252,247,.94))!important;
+  border:1px solid rgba(255,255,255,.96)!important;
+  box-shadow:0 28px 80px rgba(48,39,30,.15),0 2px 0 rgba(255,255,255,.9) inset!important;
+}
+
+.auth-card::before{
+  height:5px!important;
+  background:linear-gradient(90deg,#2f7d3b 0%,#b78b35 54%,#7c2b48 100%)!important;
+}
+
+.auth-hero-mini{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  justify-items:center!important;
+  gap:14px!important;
+  margin-bottom:24px!important;
+}
+
+.auth-card .brand{
+  width:min(230px,78vw)!important;
+  height:128px!important;
+  max-height:none!important;
+  padding:20px 24px!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+  background:#fff!important;
+  border:1px solid rgba(216,208,199,.72)!important;
+  border-radius:22px!important;
+  box-shadow:0 18px 42px rgba(48,39,30,.1)!important;
+}
+
+.auth-card .brand-video{
+  padding:0!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+  background:#e9f6e9 url('assets/diputacion-jaen-logo.svg') center/72% auto no-repeat!important;
+}
+
+.secure-badge{
+  padding:9px 16px!important;
+  background:rgba(255,255,255,.92)!important;
+  border-color:rgba(216,208,199,.88)!important;
+  box-shadow:0 12px 30px rgba(48,39,30,.08)!important;
+  font-size:13px!important;
+}
+
+.auth-card .eyebrow{
+  text-align:center!important;
+  margin-top:2px!important;
+  color:#7c2b48!important;
+  letter-spacing:.08em!important;
+}
+
+.auth-card h1{
+  text-align:center!important;
+  margin:12px 0 14px!important;
+  font-size:clamp(32px,5vw,42px)!important;
+  line-height:1.08!important;
+  letter-spacing:0!important;
+}
+
+.auth-card .lead{
+  max-width:500px!important;
+  margin:0 auto 18px!important;
+  text-align:center!important;
+  font-size:17px!important;
+  line-height:1.62!important;
+  color:#716a63!important;
+}
+
+.auth-card .trust-strip{
+  justify-content:center!important;
+  margin:16px 0 22px!important;
+}
+
+.auth-card .trust-strip span{
+  background:#fff!important;
+  border-color:rgba(216,208,199,.86)!important;
+  box-shadow:0 8px 18px rgba(48,39,30,.05)!important;
+  color:#4f4943!important;
+}
+
+.auth-card>label[for="setupVaultName"]{
+  margin-top:8px!important;
+}
+
+.auth-secret-panel{
+  margin:24px 0 18px;
+  padding:18px;
+  border:1px solid rgba(216,208,199,.8);
+  border-radius:24px;
+  background:linear-gradient(180deg,#fff,#fbf7ef);
+  box-shadow:0 16px 38px rgba(48,39,30,.08);
+}
+
+.auth-secret-panel.compact-secret{
+  margin-top:22px;
+}
+
+.auth-panel-title{
+  margin:0 0 12px;
+  color:#164f25;
+  font-size:13px;
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.auth-secret-panel label:first-of-type{
+  margin-top:0;
+}
+
+.auth-card input{
+  min-height:58px;
+  border-radius:18px!important;
+  border-color:#d9cfc4!important;
+  background:#fff!important;
+  box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 8px 20px rgba(48,39,30,.04)!important;
+}
+
+.auth-card input:focus{
+  border-color:#7db879!important;
+  outline:0!important;
+  box-shadow:0 0 0 4px rgba(47,125,59,.14),0 10px 24px rgba(48,39,30,.07)!important;
+}
+
+.auth-card .checkline{
+  margin:16px 0 0!important;
+  padding:13px 14px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid rgba(216,208,199,.72);
+  color:#5f5953;
+}
+
+.auth-card .checkline input{
+  min-height:0!important;
+  margin-top:2px!important;
+  box-shadow:none!important;
+}
+
+.auth-card .big-action{
+  min-height:58px;
+  border-radius:20px!important;
+  margin-top:8px!important;
+  box-shadow:0 18px 34px rgba(47,125,59,.25)!important;
+}
+
+.auth-card .note{
+  margin-top:16px!important;
+  background:#fffaf1!important;
+  border-color:#ead6ac!important;
+  border-radius:20px!important;
+}
+
+@media(max-width:620px){
+  .auth-card{
+    padding:26px 20px 24px!important;
+    margin:16px auto 24px!important;
+  }
+
+  .auth-card .brand{
+    width:min(214px,76vw)!important;
+    height:116px!important;
+    padding:18px 22px!important;
+  }
+
+  .auth-card h1{
+    font-size:32px!important;
+  }
+
+  .auth-card .lead{
+    text-align:left!important;
+    font-size:16px!important;
+  }
+
+  .auth-secret-panel{
+    padding:15px;
+    border-radius:22px;
+  }
+
+  .auth-card .trust-strip{
+    gap:7px!important;
+  }
+
+  .auth-card .trust-strip span{
+    font-size:11px!important;
+  }
+}
