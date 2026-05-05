@@ -1,7 +1,7 @@
-const CACHE_NAME = 'santa-teresa-local-secure-v8-branding';
+const CACHE_NAME = 'santa-teresa-local-secure-v8-1-branding-polish';
 const APP_SHELL = [
   './',
-  './index.html?v=v8-branding',
+  './index.html?v=v8-1-branding-polish',
   './styles.css',
   './extras.css',
   './app.js',
@@ -33,6 +33,6 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v8-branding') || caches.match('./index.html')))
+      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v8-1-branding-polish') || caches.match('./index.html')))
   );
 });
