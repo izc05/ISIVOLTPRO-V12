@@ -2,7 +2,7 @@
   'use strict';
 
   const $ = id => document.getElementById(id);
-  const PEOPLE_VERSION = window.SANTA_TERESA_APP_VERSION || '3.23.0-user-photo-flow';
+  const PEOPLE_VERSION = window.SANTA_TERESA_APP_VERSION || '3.24.0-unidades-convivencia';
   let quickPhotoDataUrl = '';
 
   function ready(fn){ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
@@ -55,11 +55,11 @@
     panel.id = 'peopleRegistryPanel';
     panel.className = 'people-registry no-print';
     panel.innerHTML = `
-      <article class="people-hero"><div><p class="eyebrow">Base de personas</p><h2>Alta rápida de residente</h2><p>Primero crea la persona con datos mínimos. Después podrás rellenar su ficha completa desde el nombre, habitación o QR.</p></div><span>👥</span></article>
+      <article class="people-hero"><div><p class="eyebrow">Usuarios</p><h2>Crear usuario</h2><p>Guarda nombre, unidad de convivencia, habitación y foto opcional. Después podrás crear informes desde su nombre o QR.</p></div><span>👥</span></article>
       <form id="quickPersonForm" class="quick-person-form" autocomplete="off">
         <div><label for="personName">Nombre</label><input id="personName" placeholder="Ej. María García" required></div>
         <div><label for="personRoom">Habitación</label><input id="personRoom" placeholder="Ej. 12, 104, A-03"></div>
-        <div><label for="personWing">Ala / zona</label><input id="personWing" placeholder="Ej. Ala Norte, Planta 1"></div>
+        <div><label for="personWing">Unidad de convivencia</label><input id="personWing" placeholder="Ej. A1 - Almiria"></div>
         <div><label for="personStatus">Estado</label><select id="personStatus"><option>Activa</option><option>Revisión</option><option>Archivada</option></select></div>
         <section class="quick-person-photo">
           <div class="quick-person-photo-preview"><img id="personPhotoPreview" alt="" hidden><span id="personPhotoEmpty">Sin foto</span></div>
@@ -71,12 +71,13 @@
             <input id="personPhotoInput" type="file" accept="image/*">
           </div>
         </section>
-        <button class="primary" type="submit">Crear persona y QR</button>
+        <button class="primary" type="submit">Crear usuario y QR</button>
       </form>
-      <div class="people-stats-grid"><article><strong id="peopleTotalStat">0</strong><span>Personas</span></article><article><strong id="peopleRoomsStat">0</strong><span>Habitaciones</span></article><article><strong id="peopleWingsStat">0</strong><span>Alas/Zonas</span></article></div>
-      <details class="people-picker" open><summary>Seleccionar persona para rellenar</summary><div class="people-picker-body"><input id="peoplePickerSearch" placeholder="Buscar por nombre, habitación o ala"><div id="peoplePickerList" class="people-picker-list"></div></div></details>`;
+      <div class="people-stats-grid"><article><strong id="peopleTotalStat">0</strong><span>Personas</span></article><article><strong id="peopleRoomsStat">0</strong><span>Habitaciones</span></article><article><strong id="peopleWingsStat">0</strong><span>Unidades</span></article></div>
+      <details class="people-picker" open><summary>Seleccionar persona para rellenar</summary><div class="people-picker-body"><input id="peoplePickerSearch" placeholder="Buscar por nombre, habitación o unidad"><div id="peoplePickerList" class="people-picker-list"></div></div></details>`;
     const toolbar = document.querySelector('.toolbar');
     if(toolbar) toolbar.insertAdjacentElement('beforebegin', panel); else sidebar.prepend(panel);
+    buildUnitSelector();
     $('quickPersonForm').addEventListener('submit', createPerson);
     $('personChoosePhotoBtn').onclick = () => $('personPhotoInput')?.click();
     $('personRemovePhotoBtn').onclick = () => { quickPhotoDataUrl = ''; if($('personPhotoInput')) $('personPhotoInput').value = ''; renderQuickPhoto(); };
@@ -92,9 +93,10 @@
     if(typeof state === 'undefined' || !state.key){ alert('Primero desbloquea la base.'); return; }
     const nombre = $('personName').value.trim();
     const habitacion = $('personRoom').value.trim();
-    const ala = $('personWing').value.trim();
-    const estado = $('personStatus').value || 'Activa';
+    const ala = ($('personUnit')?.value || $('personWing')?.value || '').trim();
+    const estado = 'Activa';
     if(!nombre){ alert('El nombre es obligatorio.'); return; }
+    if(!ala){ alert('Selecciona la unidad de convivencia.'); return; }
     const duplicate = state.residents?.find(r => (r.nombre||'').toLowerCase() === nombre.toLowerCase() && (r.habitacion||'') === habitacion);
     if(duplicate && !confirm('Ya existe una persona con ese nombre y habitación. ¿Crear otra igualmente?')) return;
     const id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2);
@@ -113,7 +115,19 @@
     }catch(err){ console.error(err); alert('No se ha podido crear la persona.'); }
   }
 
-  function clearQuickForm(){ ['personName','personRoom','personWing'].forEach(id => { const el = $(id); if(el) el.value=''; }); if($('personStatus')) $('personStatus').value = 'Activa'; quickPhotoDataUrl = ''; if($('personPhotoInput')) $('personPhotoInput').value = ''; renderQuickPhoto(); }
+  function buildUnitSelector(){
+    if($('personUnit')) return;
+    const room = $('personRoom')?.closest('div');
+    const wing = $('personWing')?.closest('div');
+    const status = $('personStatus')?.closest('div');
+    if(wing) wing.classList.add('legacy-user-field');
+    if(status) status.classList.add('legacy-user-field');
+    const wrap = document.createElement('div');
+    wrap.className = 'quick-unit-field';
+    wrap.innerHTML = `<label for="personUnit">Unidad de convivencia</label><select id="personUnit" required><option value="">Selecciona unidad</option><option>A1 - Almiria</option><option>A2 - Alegría</option><option>B1 - Jazmín</option><option>B2 - Margarita</option><option>C1 - Girasoles</option><option>C2 - Arcoíris</option><option>D1 - Jabalco</option><option>D2 - La Bandera</option></select>`;
+    if(room) room.insertAdjacentElement('beforebegin', wrap);
+  }
+  function clearQuickForm(){ ['personName','personRoom','personUnit','personWing'].forEach(id => { const el = $(id); if(el) el.value=''; }); quickPhotoDataUrl = ''; if($('personPhotoInput')) $('personPhotoInput').value = ''; renderQuickPhoto(); }
   async function loadQuickPhoto(file){ if(!file) return; if(!file.type.startsWith('image/')){ alert('El archivo seleccionado no es una imagen.'); return; } try{ quickPhotoDataUrl = typeof preparePhoto === 'function' ? await preparePhoto(file) : await readLocalPhoto(file); renderQuickPhoto(); }catch(err){ console.error(err); alert('No se ha podido preparar la foto. Prueba con JPG o PNG.'); } }
   function readLocalPhoto(file){ return new Promise((res,rej)=>{ const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(r.error); r.readAsDataURL(file); }); }
   function renderQuickPhoto(){ const img = $('personPhotoPreview'), empty = $('personPhotoEmpty'), choose = $('personChoosePhotoBtn'); if(!img || !empty) return; if(quickPhotoDataUrl){ img.src = quickPhotoDataUrl; img.hidden = false; empty.hidden = true; if(choose) choose.textContent = 'Cambiar foto'; }else{ img.removeAttribute('src'); img.hidden = true; empty.hidden = false; if(choose) choose.textContent = 'Añadir foto'; } }
