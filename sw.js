@@ -1,21 +1,21 @@
-const CACHE_NAME = 'santa-teresa-local-secure-v34-user-photo-flow';
+const CACHE_NAME = 'santa-teresa-local-secure-v35-unidades-convivencia';
 const APP_SHELL = [
   './',
-  './index.html?v=v34-user-photo-flow',
+  './index.html?v=v35-unidades-convivencia',
   './styles.css?v=v29-visual-legal',
   './extras.css?v=v29-visual-legal',
   './guided-form.css?v=v29-visual-legal',
   './auth-cover.css?v=v29-visual-legal',
-  './app-flow.css?v=v34-user-photo-flow',
+  './app-flow.css?v=v35-unidades-convivencia',
   './db-cards.css?v=v33-card-avatars',
   './settings-simple.css?v=v29-visual-legal',
   './iphone-glass.css?v=v31-nav-premium',
-  './app.js?v=v34-user-photo-flow',
+  './app.js?v=v35-unidades-convivencia',
   './qr-tools.js?v=v32-report-autocomplete',
   './guided-form.js?v=v32-report-autocomplete',
   './db-enhance.js?v=v33-card-avatars',
-  './settings-enhance.js?v=v34-user-photo-flow',
-  './report-workflow.js?v=v34-user-photo-flow',
+  './settings-enhance.js?v=v35-unidades-convivencia',
+  './report-workflow.js?v=v35-unidades-convivencia',
   './manifest.webmanifest',
   './assets/app-icon.svg',
   './assets/diputacion-jaen-logo.svg',
@@ -44,6 +44,6 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v34-user-photo-flow') || caches.match('./index.html')))
+      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v35-unidades-convivencia') || caches.match('./index.html')))
   );
 });

@@ -345,6 +345,15 @@ body{
   display:none;
 }
 
+.screen-user .people-stats-grid,
+.legacy-user-field{
+  display:none!important;
+}
+
+.quick-unit-field{
+  grid-column:1/-1;
+}
+
 .screen-db .quick-person-form{
   display:none;
 }
