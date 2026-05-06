@@ -1,21 +1,21 @@
-const CACHE_NAME = 'santa-teresa-local-secure-v33-card-avatars';
+const CACHE_NAME = 'santa-teresa-local-secure-v34-user-photo-flow';
 const APP_SHELL = [
   './',
-  './index.html?v=v33-card-avatars',
+  './index.html?v=v34-user-photo-flow',
   './styles.css?v=v29-visual-legal',
   './extras.css?v=v29-visual-legal',
   './guided-form.css?v=v29-visual-legal',
   './auth-cover.css?v=v29-visual-legal',
-  './app-flow.css?v=v32-report-autocomplete',
+  './app-flow.css?v=v34-user-photo-flow',
   './db-cards.css?v=v33-card-avatars',
   './settings-simple.css?v=v29-visual-legal',
   './iphone-glass.css?v=v31-nav-premium',
-  './app.js?v=v33-card-avatars',
+  './app.js?v=v34-user-photo-flow',
   './qr-tools.js?v=v32-report-autocomplete',
   './guided-form.js?v=v32-report-autocomplete',
   './db-enhance.js?v=v33-card-avatars',
-  './settings-enhance.js?v=v33-card-avatars',
-  './report-workflow.js?v=v32-report-autocomplete',
+  './settings-enhance.js?v=v34-user-photo-flow',
+  './report-workflow.js?v=v34-user-photo-flow',
   './manifest.webmanifest',
   './assets/app-icon.svg',
   './assets/diputacion-jaen-logo.svg',
@@ -44,6 +44,6 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v33-card-avatars') || caches.match('./index.html')))
+      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html?v=v34-user-photo-flow') || caches.match('./index.html')))
   );
 });

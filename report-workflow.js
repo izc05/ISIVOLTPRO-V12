@@ -140,6 +140,7 @@
     if(!selected) return;
     if(typeof selectFicha === 'function') selectFicha(id, false);
     if(typeof setStep === 'function') setStep(0);
+    if(window.setSantaScreen) window.setSantaScreen('form');
     const input = $('reportUserSearch');
     if(input) input.value = [selected.nombre || 'Sin nombre', selected.habitacion ? 'Hab. ' + selected.habitacion : ''].filter(Boolean).join(' - ');
     refreshSelectedUserState();
